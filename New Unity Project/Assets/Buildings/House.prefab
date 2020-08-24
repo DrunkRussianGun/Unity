@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1, y: 1}
-  mainRenderer: {fileID: 3014272348068713108}
+  isFood: 0
+  moneyTimer: 0
+  moneyValue: 0
+  foodValue: 0
 --- !u!1 &2992391769509382758
 GameObject:
   m_ObjectHideFlags: 0
@@ -24,6 +27,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2992391769509382776}
   - component: {fileID: 2992391769509382759}
+  - component: {fileID: 2529504673752025332}
+  - component: {fileID: 2069866555345154925}
   m_Layer: 0
   m_Name: House
   m_TagString: Untagged
@@ -59,7 +64,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 2, y: 1}
-  mainRenderer: {fileID: 0}
+  isFood: 0
+  moneyTimer: 1
+  moneyValue: 2
+  foodValue: 0
+--- !u!65 &2529504673752025332
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2992391769509382758}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.8, z: 0.4}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2069866555345154925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2992391769509382758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e35eb329fe0bfbc4895f105b25cf2ebb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2992391769256265420
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126,12 +159,6 @@ GameObject:
 --- !u!4 &2992767289621887738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4342572344458294, guid: 7908cc4dfd2040a49bdf1a7b45bcf55c,
-    type: 3}
-  m_PrefabInstance: {fileID: 2992391769256265420}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &3014272348068713108 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 23578817506939992, guid: 7908cc4dfd2040a49bdf1a7b45bcf55c,
     type: 3}
   m_PrefabInstance: {fileID: 2992391769256265420}
   m_PrefabAsset: {fileID: 0}

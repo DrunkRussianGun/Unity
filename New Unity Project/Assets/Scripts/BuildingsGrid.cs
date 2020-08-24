@@ -6,7 +6,7 @@ public class BuildingsGrid : MonoBehaviour
 {
     public Vector2Int GridSize = new Vector2Int(10, 10);
 
-    private Building[,] grid;
+    public static Building[,] grid;
     private Building flyingBuilding;
     private Camera mainCamera;
 
@@ -22,9 +22,13 @@ public class BuildingsGrid : MonoBehaviour
         if (flyingBuilding != null)
         {
             Destroy(flyingBuilding.gameObject);
+            Bank.money += 10;
         }
-
-        flyingBuilding = Instantiate(buildingPrefab);
+        if (Bank.money >= 10)
+        {
+            Bank.money -= 10;
+            flyingBuilding = Instantiate(buildingPrefab);
+        }
     }
 
     // Update is called once per frame
@@ -32,6 +36,11 @@ public class BuildingsGrid : MonoBehaviour
     {
         if (flyingBuilding != null)
         {
+            if(Input.GetMouseButtonDown(1))
+            {
+                Destroy(flyingBuilding.gameObject);
+                Bank.money += 10;
+            }
             var groundPlane = new Plane(Vector3.up, Vector3.zero);
 
             var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
