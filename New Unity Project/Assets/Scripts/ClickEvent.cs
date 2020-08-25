@@ -11,6 +11,7 @@ public class ClickEvent : MonoBehaviour, IPointerClickHandler
             var go = eventData.pointerCurrentRaycast.gameObject.GetComponent<Building>();
             var building = Instantiate(go.canBeUpgradedTo.GetComponent<Building>());
             PlaceBuilding(building,(int)pos.x,(int)pos.z,BuildingsGrid.grid);
+            building.gameObject.transform.position = pos;
             Destroy(eventData.pointerCurrentRaycast.gameObject);
         }
     }

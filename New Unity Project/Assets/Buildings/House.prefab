@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 1, y: 1}
   isFood: 0
+  canBeUpgradedTo: {fileID: 0}
   moneyTimer: 0
   moneyValue: 0
   foodValue: 0
@@ -65,6 +66,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 2, y: 1}
   isFood: 0
+  canBeUpgradedTo: {fileID: 2992391769509382758, guid: c82280679e62d4b4193f641c110dd4cb,
+    type: 3}
   moneyTimer: 1
   moneyValue: 2
   foodValue: 0

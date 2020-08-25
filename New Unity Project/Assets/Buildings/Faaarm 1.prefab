@@ -51,7 +51,7 @@ MonoBehaviour:
   canBeUpgradedTo: {fileID: 0}
   moneyTimer: 1
   moneyValue: 0
-  foodValue: 2
+  foodValue: 4
 --- !u!65 &8027520369327014387
 BoxCollider:
   m_ObjectHideFlags: 0
