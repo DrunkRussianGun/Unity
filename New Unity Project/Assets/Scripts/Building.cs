@@ -6,6 +6,9 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     public Vector2Int Size = Vector2Int.one;
+    public int maxhp = 1000;
+    public int currenthp;
+    public HealthBar healthBar;
 
     public static event Action<float> MoneyAdded;
     public static event Action<float> FoodAdded;
@@ -17,9 +20,16 @@ public class Building : MonoBehaviour
 
     private float timer;
 
+    private void Start()
+    {
+        currenthp = maxhp;
+        healthBar.SetMaxHealth(maxhp);
+    }
     private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Space))
+            TakeDamage(200);
+        if (currenthp <= 0) Destroy(this.gameObject);
         if (timer >= moneyTimer)
         {
             timer = 0;
@@ -28,6 +38,12 @@ public class Building : MonoBehaviour
         }
 
         timer += Time.deltaTime;
+    }
+
+    void TakeDamage(int damage)
+    {
+        currenthp -= damage;
+        healthBar.SetHealth(currenthp);
     }
     private void OnDrawGizmosSelected()
     {
