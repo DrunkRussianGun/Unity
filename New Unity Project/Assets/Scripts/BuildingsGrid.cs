@@ -86,7 +86,8 @@ public class BuildingsGrid : MonoBehaviour
                 grid[placeX + x, placeY + y] = flyingBuilding;
             }
         }
-
+        
+        BuildingManager.instance.buildings.Add(flyingBuilding.gameObject);
         flyingBuilding = null;
     }
 }
