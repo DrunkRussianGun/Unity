@@ -29,7 +29,8 @@ public class Building : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
             TakeDamage(200);
-        if (currenthp <= 0) Destroy(this.gameObject);
+        if (currenthp <= 0)
+			Destroy();
         if (timer >= moneyTimer)
         {
             timer = 0;
@@ -45,6 +46,13 @@ public class Building : MonoBehaviour
         currenthp -= damage;
         healthBar.SetHealth(currenthp);
     }
+
+	void Destroy()
+	{
+        BuildingManager.instance.buildings.Remove(gameObject);
+		Destroy(gameObject);
+	}
+
     private void OnDrawGizmosSelected()
     {
         for (int x = 0; x < Size.x; x++)
