@@ -8,9 +8,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyControllers : MonoBehaviour
 {
-    public float lookRadius = 0.01f;
+    public float lookRadius = 10f;
+    public int onBuildingEnterDamage = 15;
+    public int onBuildingStayDamage = 1;
 
-    Transform target;
+    Building targetBuilding;
     NavMeshAgent agent;
 
     void Start()
@@ -20,17 +22,31 @@ public class EnemyControllers : MonoBehaviour
 
     void Update()
     {
-        target = BuildingManager.instance.buildings.LastOrDefault()?.transform;
-        if (target == null)
-            return;
+        targetBuilding = BuildingManager.instance.buildings.Contains(targetBuilding)
+            ? targetBuilding
+            : BuildingManager.instance.buildings
+                .FirstOrDefault(
+                    x => Vector3.Distance(x.transform.position, transform.position) < lookRadius);
         
-        if (agent.destination != target.position)
-            agent.destination = target.position;
+        if (targetBuilding == null)
+            agent.ResetPath();
+        else
+            agent.SetDestination(targetBuilding.transform.position);
     }
 
     void OnDrawGizmosSelected()
     {
     	Gizmos.color = Color.red;
     	Gizmos.DrawWireSphere(transform.position, lookRadius);
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingEnterDamage);
+    }
+    
+    void OnCollisionStay(Collision collision)
+    {
+        collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingStayDamage);
     }
 }

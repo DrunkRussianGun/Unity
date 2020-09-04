@@ -87,7 +87,7 @@ public class BuildingsGrid : MonoBehaviour
             }
         }
         
-        BuildingManager.instance.buildings.Add(flyingBuilding.gameObject);
+		flyingBuilding.Activate();
         flyingBuilding = null;
     }
 }

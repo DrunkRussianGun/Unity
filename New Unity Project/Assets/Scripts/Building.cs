@@ -27,8 +27,6 @@ public class Building : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            TakeDamage(200);
         if (currenthp <= 0)
 			Destroy();
         if (timer >= moneyTimer)
@@ -41,15 +39,21 @@ public class Building : MonoBehaviour
         timer += Time.deltaTime;
     }
 
-    void TakeDamage(int damage)
+	public void Activate()
+	{
+        BuildingManager.instance.buildings.Add(this);
+		gameObject.GetComponent<BoxCollider>().enabled = true;
+	}
+
+    public void TakeDamage(int damage)
     {
         currenthp -= damage;
         healthBar.SetHealth(currenthp);
     }
 
-	void Destroy()
+	public void Destroy()
 	{
-        BuildingManager.instance.buildings.Remove(gameObject);
+        BuildingManager.instance.buildings.Remove(this);
 		Destroy(gameObject);
 	}
 
@@ -64,4 +68,24 @@ public class Building : MonoBehaviour
             }
         }
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+		PushAway(collision.rigidbody, BuildingManager.instance.pushingAwayForceOnEnter, ForceMode.Impulse);
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+		PushAway(collision.rigidbody, BuildingManager.instance.pushingAwayForceOnStay, ForceMode.VelocityChange);
+    }
+
+	void PushAway(Rigidbody rigidbody, float forceMultiplier, ForceMode forceMode)
+	{
+		if (rigidbody == null)
+			return;
+
+		var normalizedVector = rigidbody.transform.position - transform.position;
+		normalizedVector.Normalize();
+		rigidbody.AddForce(normalizedVector * forceMultiplier, forceMode);
+	}
 }

@@ -15,5 +15,7 @@ public class BuildingManager : MonoBehaviour
 
     #endregion
 
-    public ISet<GameObject> buildings = new HashSet<GameObject>();
+    public ISet<Building> buildings = new HashSet<Building>();
+	public float pushingAwayForceOnEnter = 20f;
+	public float pushingAwayForceOnStay = 2f;
 }
