@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,8 +11,9 @@ public class EnemyControllers : MonoBehaviour
     public int onBuildingEnterDamage = 15;
     public int onBuildingStayDamage = 1;
 
-    Building targetBuilding;
-    NavMeshAgent agent;
+    private Building targetBuilding;
+    private Vector3? targetPoint;
+    private NavMeshAgent agent;
 
     void Start()
     {
@@ -27,11 +27,32 @@ public class EnemyControllers : MonoBehaviour
             : BuildingManager.instance.buildings
                 .FirstOrDefault(
                     x => Vector3.Distance(x.transform.position, transform.position) < lookRadius);
-        
+
         if (targetBuilding == null)
-            agent.ResetPath();
+        {
+            if (targetPoint == null || agent.remainingDistance < 0.1f)
+                targetPoint = GetRandomPointOnPlane();
+            if (targetPoint.HasValue)
+                agent.SetDestination(targetPoint.Value);
+        }
         else
             agent.SetDestination(targetBuilding.transform.position);
+    }
+
+    Vector3? GetRandomPointOnPlane()
+    {
+        var planeForWalk = GameManager.Instance.planeForWalk;
+        var planeVertices = GameManager.Instance.planeVertices;
+        if (planeVertices == null)
+            return null;
+
+        var leftTop = planeForWalk.transform.TransformPoint(planeVertices[0]);
+        var rightTop = planeForWalk.transform.TransformPoint(planeVertices[10]);
+        var leftBottom = planeForWalk.transform.TransformPoint(planeVertices[110]);
+        var rightBottom = planeForWalk.transform.TransformPoint(planeVertices[120]);
+        var xAxis = rightTop - leftTop;
+        var zAxis = leftBottom - leftTop;
+        return leftTop + xAxis * Random.value + zAxis * Random.value;
     }
 
     void OnDrawGizmosSelected()
