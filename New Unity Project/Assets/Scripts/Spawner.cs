@@ -21,7 +21,7 @@ public class Spawner : MonoBehaviour
     IEnumerator SpawnCD()
     {
     	yield return new WaitForSeconds(TimeForNewSpawn);
-    	Instantiate(SpawnObject, SpawnPosition.position, Quaternion.identity);
+    	Instantiate(SpawnObject, SpawnPosition.position, SpawnPosition.rotation);
     	Repeat();
     }
 }
