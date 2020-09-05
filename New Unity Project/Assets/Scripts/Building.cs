@@ -7,6 +7,7 @@ public class Building : EntityWithHealth
 {
 	internal bool isActivated;
 
+	 [HideInInspector]
     public Vector2Int Size = Vector2Int.one;
 
     public static event Action<float> MoneyAdded;
@@ -18,6 +19,8 @@ public class Building : EntityWithHealth
     public float moneyIncrement;
     public float foodIncrement;
     private UpdateTimer moneyAndFoodTimer;
+
+    public float cost;
 
     protected override void Start()
     {

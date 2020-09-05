@@ -464,7 +464,7 @@ GameObject:
   - component: {fileID: 228148938}
   - component: {fileID: 228148937}
   m_Layer: 5
-  m_Name: FoodCounter
+  m_Name: Food counter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -482,7 +482,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1050339424}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -501,8 +501,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cab5fce14e9f2ec4cb0053239a1d7b90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overallMoney: {fileID: 1062674852}
-  overallFood: {fileID: 228148938}
+  money: 0
+  food: 0
+  initialMoney: 250
+  initialFood: 0
+  moneyView: {fileID: 1062674852}
+  foodView: {fileID: 228148938}
 --- !u!114 &228148938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -703,6 +707,12 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: -1
   m_Mesh: {fileID: 4300000, guid: 273aafbd147aec044a0f20c7242a83ca, type: 3}
+--- !u!4 &442785966 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400000, guid: 273aafbd147aec044a0f20c7242a83ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 751392637}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &480971985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -894,9 +904,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '2300
-
-'
+  m_Text: 300
 --- !u!222 &617362467
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -974,7 +982,7 @@ GameObject:
   - component: {fileID: 641803991}
   - component: {fileID: 641803990}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Money label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -992,7 +1000,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1050339424}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1625,7 +1633,7 @@ GameObject:
   - component: {fileID: 948140405}
   - component: {fileID: 948140409}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Shop button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1944,7 +1952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16aad2443cf70e4a8a483dc8b17f9c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 442785966}
   distance: 12
   xSpeed: 120
   ySpeed: 120
@@ -2103,10 +2111,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 641803989}
+  - {fileID: 1738836966}
   - {fileID: 1062674850}
   - {fileID: 228148936}
-  - {fileID: 1738836966}
-  - {fileID: 641803989}
   - {fileID: 948140404}
   - {fileID: 2021203039}
   m_Father: {fileID: 0}
@@ -2128,9 +2136,8 @@ GameObject:
   - component: {fileID: 1062674850}
   - component: {fileID: 1062674853}
   - component: {fileID: 1062674852}
-  - component: {fileID: 1062674851}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Money counter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2148,27 +2155,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1050339424}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 248, y: 195}
   m_SizeDelta: {x: 80, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1062674851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1062674849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cab5fce14e9f2ec4cb0053239a1d7b90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  overallMoney: {fileID: 1062674852}
-  overallFood: {fileID: 228148938}
 --- !u!114 &1062674852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2279,7 +2272,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2500
+  m_Text: 150
 --- !u!222 &1077847520
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3294,7 +3287,7 @@ GameObject:
   - component: {fileID: 1738836968}
   - component: {fileID: 1738836967}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Food label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3312,7 +3305,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1050339424}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4363,7 +4356,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 2200
+  m_Text: 250
 --- !u!222 &2147233296
 CanvasRenderer:
   m_ObjectHideFlags: 0

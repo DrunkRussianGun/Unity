@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Bank.money>=100 && Bank.food>=1000)
+        if (Bank.Instance.money >= 100 && Bank.Instance.food >= 1000)
         {
             go.SetActive(true);
         }

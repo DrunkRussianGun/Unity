@@ -48,17 +48,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1000
+  currentHealth: 0
   healthRestoringDelay: 5
   healthInterval: 1
   healthIncrement: 10
   Size: {x: 1, y: 1}
-  healthBar: {fileID: 4599450355648673829}
   isFood: 1
   canBeUpgradedTo: {fileID: 7087649918891496535, guid: 691dc3a7d2cc4564bb6bf317bc10476f,
     type: 3}
   moneyAndFoodInterval: 1
   moneyIncrement: 0
-  foodIncrement: 2
+  foodIncrement: 4
+  cost: 150
 --- !u!65 &8027520369327014387
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -307,15 +308,3 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 7006377738911981990}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4599450355648673829 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6840722455522580867, guid: 1ce8d8d415d02e44787108b85948f76f,
-    type: 3}
-  m_PrefabInstance: {fileID: 7006377738911981990}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 640cac461707cbe4698e966dda974a23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
