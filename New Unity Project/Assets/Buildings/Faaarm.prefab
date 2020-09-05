@@ -49,7 +49,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 1, y: 1}
   maxhp: 1000
-  currenthp: 0
   healthBar: {fileID: 4599450355648673829}
   isFood: 1
   canBeUpgradedTo: {fileID: 7087649918891496535, guid: 691dc3a7d2cc4564bb6bf317bc10476f,
@@ -57,6 +56,9 @@ MonoBehaviour:
   moneyAndFoodInterval: 1
   moneyIncrement: 0
   foodIncrement: 2
+  healthRestoringDelay: 5
+  healthInterval: 1
+  healthIncrement: 10
 --- !u!65 &8027520369327014387
 BoxCollider:
   m_ObjectHideFlags: 0

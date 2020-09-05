@@ -20,12 +20,19 @@ public class Building : MonoBehaviour
     public float moneyAndFoodInterval;
     public float moneyIncrement;
     public float foodIncrement;
-
     private UpdateTimer moneyAndFoodTimer;
+
+	public float healthRestoringDelay;
+	public float healthInterval;
+	public int healthIncrement;
+	private UpdateTimer healthDelay;
+	private UpdateTimer healthTimer;
 
     private void Start()
     {
 		moneyAndFoodTimer = new UpdateTimer(moneyAndFoodInterval);
+		healthDelay = new UpdateTimer(healthRestoringDelay, 1, true);
+		healthTimer = new UpdateTimer(healthInterval);
     }
 
     private void Update()
@@ -41,6 +48,8 @@ public class Building : MonoBehaviour
             if (isFood)
 				FoodAdded.Invoke(foodIncrement);
         }
+		if (healthDelay.Check(Time.deltaTime) && healthTimer.Check(Time.deltaTime))
+			Heal(healthIncrement);
     }
 
 	public void Activate()
@@ -54,9 +63,17 @@ public class Building : MonoBehaviour
 		isActivated = true;
 	}
 
+	public void Heal(int heal)
+	{
+		currenthp = Math.Min(maxhp, currenthp + heal);
+        healthBar.SetHealth(currenthp);
+	}
+
     public void TakeDamage(int damage)
     {
         currenthp -= damage;
+		healthDelay.ResetAll();
+		healthTimer.ResetTimer();
         healthBar.SetHealth(currenthp);
     }
 

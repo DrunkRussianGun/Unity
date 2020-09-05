@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 1, y: 1}
   maxhp: 1000
-  currenthp: 0
   healthBar: {fileID: 0}
   isFood: 0
   canBeUpgradedTo: {fileID: 0}
   moneyAndFoodInterval: 0
   moneyIncrement: 0
   foodIncrement: 0
+  healthRestoringDelay: 0
+  healthInterval: 0
+  healthIncrement: 0
 --- !u!1 &2992391769509382758
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,7 +72,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 2, y: 1}
   maxhp: 1000
-  currenthp: 0
   healthBar: {fileID: 2409293183120952414}
   isFood: 0
   canBeUpgradedTo: {fileID: 2992391769509382758, guid: c82280679e62d4b4193f641c110dd4cb,
@@ -78,6 +79,9 @@ MonoBehaviour:
   moneyAndFoodInterval: 1
   moneyIncrement: 2
   foodIncrement: 0
+  healthRestoringDelay: 3
+  healthInterval: 1
+  healthIncrement: 7
 --- !u!65 &2529504673752025332
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -50,13 +50,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 1, y: 1}
   maxhp: 1500
-  currenthp: 0
   healthBar: {fileID: 3698485938839475697}
   isFood: 1
   canBeUpgradedTo: {fileID: 0}
   moneyAndFoodInterval: 1
   moneyIncrement: 0
   foodIncrement: 4
+  healthRestoringDelay: 5
+  healthInterval: 1
+  healthIncrement: 15
 --- !u!65 &8027520369327014387
 BoxCollider:
   m_ObjectHideFlags: 0
