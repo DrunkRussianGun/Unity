@@ -54,9 +54,9 @@ MonoBehaviour:
   isFood: 1
   canBeUpgradedTo: {fileID: 7087649918891496535, guid: 691dc3a7d2cc4564bb6bf317bc10476f,
     type: 3}
-  moneyTimer: 1
-  moneyValue: 0
-  foodValue: 2
+  moneyAndFoodInterval: 1
+  moneyIncrement: 0
+  foodIncrement: 2
 --- !u!65 &8027520369327014387
 BoxCollider:
   m_ObjectHideFlags: 0

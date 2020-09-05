@@ -14,29 +14,32 @@ public class Building : MonoBehaviour
     public static event Action<float> FoodAdded;
     public bool isFood;
     public GameObject canBeUpgradedTo;
-    [SerializeField] private float moneyTimer;
-    [SerializeField] private float moneyValue;
-    [SerializeField] private float foodValue;
 
-    private float timer;
+    public float moneyAndFoodInterval;
+    public float moneyIncrement;
+    public float foodIncrement;
+
+    private UpdateTimer moneyAndFoodTimer;
 
     private void Start()
     {
         currenthp = maxhp;
         healthBar.SetMaxHealth(maxhp);
+
+		moneyAndFoodTimer = new UpdateTimer(moneyAndFoodInterval);
     }
+
     private void Update()
     {
         if (currenthp <= 0)
 			Destroy();
-        if (timer >= moneyTimer)
-        {
-            timer = 0;
-            MoneyAdded.Invoke(moneyValue);
-            if (isFood) FoodAdded.Invoke(foodValue);
-        }
 
-        timer += Time.deltaTime;
+        if (moneyAndFoodTimer.Check(Time.deltaTime))
+        {
+            MoneyAdded.Invoke(moneyIncrement);
+            if (isFood)
+				FoodAdded.Invoke(foodIncrement);
+        }
     }
 
 	public void Activate()

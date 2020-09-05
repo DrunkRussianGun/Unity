@@ -18,9 +18,9 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   isFood: 0
   canBeUpgradedTo: {fileID: 0}
-  moneyTimer: 0
-  moneyValue: 0
-  foodValue: 0
+  moneyAndFoodInterval: 0
+  moneyIncrement: 0
+  foodIncrement: 0
 --- !u!1 &2992391769509382758
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,9 +75,9 @@ MonoBehaviour:
   isFood: 0
   canBeUpgradedTo: {fileID: 2992391769509382758, guid: c82280679e62d4b4193f641c110dd4cb,
     type: 3}
-  moneyTimer: 1
-  moneyValue: 2
-  foodValue: 0
+  moneyAndFoodInterval: 1
+  moneyIncrement: 2
+  foodIncrement: 0
 --- !u!65 &2529504673752025332
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -53,9 +53,9 @@ MonoBehaviour:
   healthBar: {fileID: 7265464015608582417}
   isFood: 0
   canBeUpgradedTo: {fileID: 0}
-  moneyTimer: 1
-  moneyValue: 2
-  foodValue: 0
+  moneyAndFoodInterval: 1
+  moneyIncrement: 2
+  foodIncrement: 0
 --- !u!65 &2529504673752025332
 BoxCollider:
   m_ObjectHideFlags: 0
