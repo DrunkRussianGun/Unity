@@ -707,6 +707,12 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: -1
   m_Mesh: {fileID: 4300000, guid: 273aafbd147aec044a0f20c7242a83ca, type: 3}
+--- !u!4 &442785966 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400000, guid: 273aafbd147aec044a0f20c7242a83ca,
+    type: 3}
+  m_PrefabInstance: {fileID: 751392637}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &480971985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1946,7 +1952,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16aad2443cf70e4a8a483dc8b17f9c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 442785966}
   distance: 12
   xSpeed: 120
   ySpeed: 120
