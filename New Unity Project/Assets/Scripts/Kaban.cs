@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class EnemyControllers : MonoBehaviour
+public class Kaban : EntityWithHealth
 {
     public float lookRadius = 10f;
     public int onBuildingEnterDamage = 15;
@@ -15,13 +15,18 @@ public class EnemyControllers : MonoBehaviour
     private Vector3? targetPoint;
     private NavMeshAgent agent;
 
-    void Start()
+    protected override void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+        if (!isAlive)
+            return;
+
         targetBuilding = BuildingManager.instance.buildings.Contains(targetBuilding)
             ? targetBuilding
             : BuildingManager.instance.buildings

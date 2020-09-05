@@ -48,17 +48,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812cfcca9ddb5cb4a97de7f4df0b17de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 1500
+  healthRestoringDelay: 5
+  healthInterval: 1
+  healthIncrement: 15
   Size: {x: 1, y: 1}
-  maxhp: 1500
   healthBar: {fileID: 3698485938839475697}
   isFood: 1
   canBeUpgradedTo: {fileID: 0}
   moneyAndFoodInterval: 1
   moneyIncrement: 0
   foodIncrement: 4
-  healthRestoringDelay: 5
-  healthInterval: 1
-  healthIncrement: 15
 --- !u!65 &8027520369327014387
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -282,6 +282,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2905290880028176372}
     m_Modifications:
+    - target: {fileID: 6840722454260649082, guid: 1ce8d8d415d02e44787108b85948f76f,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.9137255
+      objectReference: {fileID: 0}
+    - target: {fileID: 6840722454260649082, guid: 1ce8d8d415d02e44787108b85948f76f,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.105882354
+      objectReference: {fileID: 0}
     - target: {fileID: 6840722454260649083, guid: 1ce8d8d415d02e44787108b85948f76f,
         type: 3}
       propertyPath: m_AnchorMax.x

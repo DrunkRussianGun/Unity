@@ -8,8 +8,6 @@ public class Spawner : MonoBehaviour
     public Transform SpawnPosition;
     public GameObject SpawnObject; 
     public float TimeForNewSpawn;
-    
-    private List<GameObject> justSpawnedKabans = new List<GameObject>();
 
     void Start()
     {
@@ -33,13 +31,6 @@ public class Spawner : MonoBehaviour
         if (BuildingManager.instance.buildings.Count == 0)
             return;
         
-        justSpawnedKabans = justSpawnedKabans
-            .Where(x => Vector3.Distance(x.transform.position, SpawnPosition.position) < 1f)
-            .ToList();
-        if (justSpawnedKabans.Count > 0)
-            return;
-        
     	var kaban = Instantiate(SpawnObject, SpawnPosition.position, SpawnPosition.rotation);
-        justSpawnedKabans.Add(kaban);
     }
 }
