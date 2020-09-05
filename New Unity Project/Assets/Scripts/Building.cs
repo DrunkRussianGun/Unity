@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+	private bool isActivated;
+
     public Vector2Int Size = Vector2Int.one;
     public int maxhp = 1000;
-    public int currenthp;
+    private int currenthp;
     public HealthBar healthBar;
 
     public static event Action<float> MoneyAdded;
@@ -23,17 +25,16 @@ public class Building : MonoBehaviour
 
     private void Start()
     {
-        currenthp = maxhp;
-        healthBar.SetMaxHealth(maxhp);
-
 		moneyAndFoodTimer = new UpdateTimer(moneyAndFoodInterval);
     }
 
     private void Update()
     {
+		if (!isActivated)
+			return;
+
         if (currenthp <= 0)
 			Destroy();
-
         if (moneyAndFoodTimer.Check(Time.deltaTime))
         {
             MoneyAdded.Invoke(moneyIncrement);
@@ -46,6 +47,11 @@ public class Building : MonoBehaviour
 	{
         BuildingManager.instance.buildings.Add(this);
 		gameObject.GetComponent<BoxCollider>().enabled = true;
+
+		currenthp = maxhp;
+        healthBar.SetMaxHealth(maxhp);
+
+		isActivated = true;
 	}
 
     public void TakeDamage(int damage)
@@ -57,6 +63,7 @@ public class Building : MonoBehaviour
 	public void Destroy()
 	{
         BuildingManager.instance.buildings.Remove(this);
+		isActivated = false;
 		Destroy(gameObject);
 	}
 
