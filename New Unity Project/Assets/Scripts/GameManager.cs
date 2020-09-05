@@ -4,7 +4,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public static GameManager Instance { get; private set; }
+
+    void Awake()
+    {
+        Instance = this;
+        if (planeForWalk)
+            planeVertices = planeForWalk.GetComponent<MeshFilter>()?.sharedMesh.vertices;
+    }
+
+    public GameObject planeForWalk;
+    internal Vector3[] planeVertices;
+
     public GameObject go;
 
     // Update is called once per frame

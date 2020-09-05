@@ -8,11 +8,13 @@ public class ClickEvent : MonoBehaviour, IPointerClickHandler
         var pos = eventData.pointerCurrentRaycast.gameObject.transform.localPosition;
         if (eventData.pointerId == -2)
         {
-            var go = eventData.pointerCurrentRaycast.gameObject.GetComponent<Building>();
-            var building = Instantiate(go.canBeUpgradedTo.GetComponent<Building>());
+            var oldBuilding = eventData.pointerCurrentRaycast.gameObject.GetComponent<Building>();
+            var building = Instantiate(oldBuilding.canBeUpgradedTo.GetComponent<Building>());
             PlaceBuilding(building,(int)pos.x,(int)pos.z,BuildingsGrid.grid);
             building.gameObject.transform.position = pos;
-            Destroy(eventData.pointerCurrentRaycast.gameObject);
+
+            oldBuilding.Destroy();
+            building.Activate();
         }
     }
 

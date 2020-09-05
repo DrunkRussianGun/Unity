@@ -47,15 +47,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 812cfcca9ddb5cb4a97de7f4df0b17de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 1000
+  healthRestoringDelay: 3
+  healthInterval: 1
+  healthIncrement: 10
   Size: {x: 2, y: 1}
-  maxhp: 1000
-  currenthp: 0
   healthBar: {fileID: 7265464015608582417}
   isFood: 0
   canBeUpgradedTo: {fileID: 0}
-  moneyTimer: 1
-  moneyValue: 2
-  foodValue: 0
+  moneyAndFoodInterval: 1
+  moneyIncrement: 2
+  foodIncrement: 0
 --- !u!65 &2529504673752025332
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -65,7 +67,7 @@ BoxCollider:
   m_GameObject: {fileID: 2992391769509382758}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.8, z: 0.4}
   m_Center: {x: 0, y: 0, z: 0}
@@ -151,6 +153,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2992391769509382776}
     m_Modifications:
+    - target: {fileID: 6840722454260649082, guid: 1ce8d8d415d02e44787108b85948f76f,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.105882354
+      objectReference: {fileID: 0}
+    - target: {fileID: 6840722454260649082, guid: 1ce8d8d415d02e44787108b85948f76f,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.9137255
+      objectReference: {fileID: 0}
     - target: {fileID: 6840722454260649083, guid: 1ce8d8d415d02e44787108b85948f76f,
         type: 3}
       propertyPath: m_AnchorMax.x

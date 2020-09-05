@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -21,7 +22,15 @@ public class Spawner : MonoBehaviour
     IEnumerator SpawnCD()
     {
     	yield return new WaitForSeconds(TimeForNewSpawn);
-    	Instantiate(SpawnObject, SpawnPosition.position, Quaternion.identity);
+        CreateKaban();
     	Repeat();
+    }
+
+    private void CreateKaban()
+    {
+        if (BuildingManager.instance.buildings.Count == 0)
+            return;
+        
+    	var kaban = Instantiate(SpawnObject, SpawnPosition.position, SpawnPosition.rotation);
     }
 }

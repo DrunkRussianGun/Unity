@@ -3,48 +3,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : EntityWithHealth
 {
+	internal bool isActivated;
+
     public Vector2Int Size = Vector2Int.one;
-    public int maxhp = 1000;
-    public int currenthp;
-    public HealthBar healthBar;
 
     public static event Action<float> MoneyAdded;
     public static event Action<float> FoodAdded;
     public bool isFood;
     public GameObject canBeUpgradedTo;
-    [SerializeField] private float moneyTimer;
-    [SerializeField] private float moneyValue;
-    [SerializeField] private float foodValue;
 
-    private float timer;
+    public float moneyAndFoodInterval;
+    public float moneyIncrement;
+    public float foodIncrement;
+    private UpdateTimer moneyAndFoodTimer;
 
-    private void Start()
+    protected override void Start()
     {
-        currenthp = maxhp;
-        healthBar.SetMaxHealth(maxhp);
+		base.Start();
+		moneyAndFoodTimer = new UpdateTimer(moneyAndFoodInterval);
     }
-    private void Update()
+
+    protected override void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            TakeDamage(200);
-        if (currenthp <= 0) Destroy(this.gameObject);
-        if (timer >= moneyTimer)
+		if (!isActivated)
+			return;
+
+		base.Update();
+        if (moneyAndFoodTimer.Check(Time.deltaTime))
         {
-            timer = 0;
-            MoneyAdded.Invoke(moneyValue);
-            if (isFood) FoodAdded.Invoke(foodValue);
+            MoneyAdded.Invoke(moneyIncrement);
+            if (isFood)
+				FoodAdded.Invoke(foodIncrement);
         }
-
-        timer += Time.deltaTime;
     }
 
-    void TakeDamage(int damage)
-    {
-        currenthp -= damage;
-        healthBar.SetHealth(currenthp);
-    }
+	public void Activate()
+	{
+        BuildingManager.instance.buildings.Add(this);
+		gameObject.GetComponent<BoxCollider>().enabled = true;
+		isActivated = true;
+	}
+
+	public override void Destroy()
+	{
+        BuildingManager.instance.buildings.Remove(this);
+		isActivated = false;
+		base.Destroy();
+	}
+
     private void OnDrawGizmosSelected()
     {
         for (int x = 0; x < Size.x; x++)
@@ -56,4 +64,24 @@ public class Building : MonoBehaviour
             }
         }
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+		PushAway(collision.rigidbody, BuildingManager.instance.pushingAwayForceOnEnter, ForceMode.Impulse);
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+		PushAway(collision.rigidbody, BuildingManager.instance.pushingAwayForceOnStay, ForceMode.VelocityChange);
+    }
+
+	void PushAway(Rigidbody rigidbody, float forceMultiplier, ForceMode forceMode)
+	{
+		if (rigidbody == null)
+			return;
+
+		var normalizedVector = rigidbody.transform.position - transform.position;
+		normalizedVector.Normalize();
+		rigidbody.AddForce(normalizedVector * forceMultiplier, forceMode);
+	}
 }
