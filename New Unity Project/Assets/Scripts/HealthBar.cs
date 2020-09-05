@@ -13,6 +13,9 @@ public class HealthBar : MonoBehaviour
     public void SetHealth(int health)
     {
         slider.value = health;
+        var isHealthBarVisible = slider.value < slider.maxValue;
+        foreach (var @object in gameObject.GetComponentsInChildren<Image>())
+            @object.enabled = isHealthBarVisible;
     }
 
     public void SetMaxHealth(int health)
