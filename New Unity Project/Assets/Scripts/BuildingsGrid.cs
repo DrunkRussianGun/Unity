@@ -19,51 +19,57 @@ public class BuildingsGrid : MonoBehaviour
 
     public void StartPlacingBuilding(Building buildingPrefab)
     {
-        if (flyingBuilding != null)
-        {
-            Destroy(flyingBuilding.gameObject);
-            Bank.money += 10;
-        }
-        if (Bank.money >= 10)
-        {
-            Bank.money -= 10;
-            flyingBuilding = Instantiate(buildingPrefab);
-        }
+        if (!(flyingBuilding is null))
+	        CancelPlacingBuilding();
+
+        if (Bank.Instance.money < buildingPrefab.cost)
+	        return;
+
+        Bank.Instance.money -= buildingPrefab.cost;
+        flyingBuilding = Instantiate(buildingPrefab);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (flyingBuilding != null)
-        {
-            if(Input.GetMouseButtonDown(1))
-            {
-                Destroy(flyingBuilding.gameObject);
-                Bank.money += 10;
-            }
-            var groundPlane = new Plane(Vector3.up, Vector3.zero);
+	    if (flyingBuilding is null)
+		    return;
+	    if (Input.GetMouseButtonDown(1))
+	    {
+		    CancelPlacingBuilding();
+		    return;
+	    }
 
-            var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (groundPlane.Raycast(ray, out float position))
-            {
-                Vector3 wrldPos = ray.GetPoint(position);
+	    var groundPlane = new Plane(Vector3.up, Vector3.zero);
 
-                int x = Mathf.RoundToInt(wrldPos.x);
-                int y = Mathf.RoundToInt(wrldPos.z);
+	    var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+	    if (groundPlane.Raycast(ray, out float position))
+	    {
+		    Vector3 wrldPos = ray.GetPoint(position);
 
-                flyingBuilding.transform.position = new Vector3(x,0,y);
+		    int x = Mathf.RoundToInt(wrldPos.x);
+		    int y = Mathf.RoundToInt(wrldPos.z);
 
-                bool available = true;
-                if (x < 0 || x > GridSize.x - flyingBuilding.Size.x) available = false;
-                if (y < 0 || y > GridSize.y - flyingBuilding.Size.y) available = false;
-                if (available && IsPlaceTaken(x, y)) available = false;
-                if (available  && Input.GetMouseButtonDown(0))
-                {
-                    PlaceFlyingBuilding(x, y);
-                }
-            }
-        }
+		    flyingBuilding.transform.position = new Vector3(x,0,y);
+
+		    bool available = true;
+		    if (x < 0 || x > GridSize.x - flyingBuilding.Size.x) available = false;
+		    if (y < 0 || y > GridSize.y - flyingBuilding.Size.y) available = false;
+		    if (available && IsPlaceTaken(x, y)) available = false;
+		    if (available  && Input.GetMouseButtonDown(0))
+		    {
+			    PlaceFlyingBuilding(x, y);
+		    }
+	    }
     }
+
+    private void CancelPlacingBuilding()
+    {
+	    Bank.Instance.money += flyingBuilding.cost;
+	    Destroy(flyingBuilding.gameObject);
+	    flyingBuilding = null;
+    }
+    
     private bool IsPlaceTaken(int placeX, int placeY)
     {
         for (int x = 0; x < flyingBuilding.Size.x; x++)
@@ -86,7 +92,8 @@ public class BuildingsGrid : MonoBehaviour
                 grid[placeX + x, placeY + y] = flyingBuilding;
             }
         }
-
+        
+		flyingBuilding.Activate();
         flyingBuilding = null;
     }
 }
