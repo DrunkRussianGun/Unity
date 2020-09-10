@@ -1,21 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildingManager : MonoBehaviour
 {
     #region Singletone
 
-    public static BuildingManager instance;
+    public static BuildingManager Instance;
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     #endregion
 
-    public ISet<Building> buildings = new HashSet<Building>();
+    public ISet<Building> Buildings = new HashSet<Building>();
 	public float pushingAwayForceOnEnter = 20f;
 	public float pushingAwayForceOnStay = 2f;
 }

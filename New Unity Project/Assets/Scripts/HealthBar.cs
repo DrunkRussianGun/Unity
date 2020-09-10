@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HealthBar : MonoBehaviour
 {
-    protected Slider slider => GetComponent<Slider>();
+    protected Slider Slider => GetComponent<Slider>();
 
     protected virtual void Start()
     {
@@ -12,15 +12,15 @@ public class HealthBar : MonoBehaviour
 
     public void SetHealth(int health)
     {
-        slider.value = health;
-        var isHealthBarVisible = slider.value < slider.maxValue;
+        Slider.value = health;
+        var isHealthBarVisible = Slider.value < Slider.maxValue;
         foreach (var @object in gameObject.GetComponentsInChildren<Image>())
             @object.enabled = isHealthBarVisible;
     }
 
     public void SetMaxHealth(int health)
     {
-        slider.maxValue = health;
-        slider.value = health;
+        Slider.maxValue = health;
+        Slider.value = health;
     }
 }

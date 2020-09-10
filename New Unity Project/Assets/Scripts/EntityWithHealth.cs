@@ -3,25 +3,25 @@ using UnityEngine;
 
 public abstract class EntityWithHealth : MonoBehaviour
 {
-    protected bool isAlive = true;
+    protected bool IsAlive = true;
     public int maxHealth;
     public int currentHealth;
     public float healthRestoringDelay;
     public float healthInterval;
     public int healthIncrement;
-    protected UpdateTimer healthDelay;
-    protected UpdateTimer healthTimer;
-    protected HealthBar healthBar;
+    protected UpdateTimer HealthDelay;
+    protected UpdateTimer HealthTimer;
+    protected HealthBar HealthBar;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         currentHealth = maxHealth;
-        healthDelay = new UpdateTimer(healthRestoringDelay, 1, true);
-        healthTimer = new UpdateTimer(healthInterval);
+        HealthDelay = new UpdateTimer(healthRestoringDelay, 1, true);
+        HealthTimer = new UpdateTimer(healthInterval);
 
-        healthBar = GetComponentInChildren<HealthBar>();
-        healthBar?.SetMaxHealth(maxHealth);
+        HealthBar = GetComponentInChildren<HealthBar>();
+        HealthBar?.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -29,27 +29,27 @@ public abstract class EntityWithHealth : MonoBehaviour
     {
         if (currentHealth <= 0)
             Destroy();
-        if (healthDelay.Check(Time.deltaTime) && healthTimer.Check(Time.deltaTime))
+        if (HealthDelay.Check(Time.deltaTime) && HealthTimer.Check(Time.deltaTime))
             Heal(healthIncrement);
     }
 
     public virtual void Heal(int heal)
     {
         currentHealth = Math.Min(maxHealth, currentHealth + heal);
-        healthBar?.SetHealth(currentHealth);
+        HealthBar?.SetHealth(currentHealth);
     }
 
     public virtual void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        healthDelay.ResetAll();
-        healthTimer.ResetTimer();
-        healthBar?.SetHealth(currentHealth);
+        HealthDelay.ResetAll();
+        HealthTimer.ResetTimer();
+        HealthBar?.SetHealth(currentHealth);
     }
 
     public virtual void Destroy()
     {
-        isAlive = false;
+        IsAlive = false;
         Destroy(gameObject);
     }
 }

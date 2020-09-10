@@ -10,7 +10,7 @@ public class ClickEvent : MonoBehaviour, IPointerClickHandler
         {
             var oldBuilding = eventData.pointerCurrentRaycast.gameObject.GetComponent<Building>();
             var building = Instantiate(oldBuilding.canBeUpgradedTo.GetComponent<Building>());
-            PlaceBuilding(building,(int)pos.x,(int)pos.z,BuildingsGrid.grid);
+            PlaceBuilding(building,(int)pos.x,(int)pos.z,BuildingsGrid.Grid);
             building.gameObject.transform.position = pos;
 
             oldBuilding.Destroy();
