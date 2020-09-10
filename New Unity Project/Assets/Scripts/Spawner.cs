@@ -22,15 +22,10 @@ public class Spawner : MonoBehaviour
     IEnumerator SpawnCD()
     {
     	yield return new WaitForSeconds(TimeForNewSpawn);
-        CreateKaban();
-    	Repeat();
-    }
 
-    private void CreateKaban()
-    {
-        if (BuildingManager.instance.buildings.Count == 0)
-            return;
-        
-    	var kaban = Instantiate(SpawnObject, SpawnPosition.position, SpawnPosition.rotation);
+		if (KabanManager.instance.kabans.Count < BuildingManager.instance.buildings.Count * 2)
+        	Instantiate(SpawnObject, SpawnPosition.position, SpawnPosition.rotation);
+
+    	Repeat();
     }
 }

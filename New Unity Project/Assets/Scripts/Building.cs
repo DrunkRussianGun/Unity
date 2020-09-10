@@ -30,7 +30,7 @@ public class Building : EntityWithHealth
 
     protected override void Update()
     {
-		if (!isActivated)
+		if (!isActivated || !GameManager.Instance.hasGameStarted)
 			return;
 
 		base.Update();
@@ -47,6 +47,8 @@ public class Building : EntityWithHealth
         BuildingManager.instance.buildings.Add(this);
 		gameObject.GetComponent<BoxCollider>().enabled = true;
 		isActivated = true;
+
+		GameManager.Instance.hasGameStarted = true;
 	}
 
 	public override void Destroy()

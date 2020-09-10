@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public GameObject planeForWalk;
     internal Vector3[] planeVertices;
 
+    public bool hasGameStarted;
+    
     public GameObject go;
 
     // Update is called once per frame

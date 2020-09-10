@@ -17,6 +17,8 @@ public class Kaban : EntityWithHealth
 
     protected override void Start()
     {
+        KabanManager.instance.kabans.Add(this);
+        
         agent = GetComponent<NavMeshAgent>();
         base.Start();
     }
@@ -24,7 +26,7 @@ public class Kaban : EntityWithHealth
     protected override void Update()
     {
         base.Update();
-        if (!isAlive)
+        if (!isAlive || !GameManager.Instance.hasGameStarted)
             return;
 
         targetBuilding = BuildingManager.instance.buildings.Contains(targetBuilding)
@@ -74,5 +76,12 @@ public class Kaban : EntityWithHealth
     void OnCollisionStay(Collision collision)
     {
         collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingStayDamage);
+    }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+
+        KabanManager.instance.kabans.Remove(this);
     }
 }

@@ -942,7 +942,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 40
+  m_Radius: 18
   m_Center: {x: -0.20675278, y: 4.888109, z: -15.774737}
 --- !u!4 &638617648
 Transform:
@@ -952,7 +952,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638617646}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: -4.8, z: 20}
+  m_LocalPosition: {x: 5, y: -4.8, z: 28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2583,6 +2583,7 @@ GameObject:
   - component: {fileID: 1330970797}
   - component: {fileID: 1330970799}
   - component: {fileID: 1330970800}
+  - component: {fileID: 1330970801}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2661,6 +2662,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planeForWalk: {fileID: 1267405933}
   go: {fileID: 0}
+--- !u!114 &1330970801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330970796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99885f0654d1fcc4cba55a2e0d12c58d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1562720700
 GameObject:
   m_ObjectHideFlags: 0
@@ -4124,6 +4137,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1324452536, guid: ab607b5176a56d44495fa709f6354a0f, type: 3}
+      propertyPath: lookRadius
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 1118015028418415402, guid: ab607b5176a56d44495fa709f6354a0f,
         type: 3}
       propertyPath: m_AnchorMax.x
