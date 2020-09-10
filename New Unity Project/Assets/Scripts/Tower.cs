@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
@@ -25,7 +23,7 @@ public class Tower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!building.isActivated)
+        if (!building.IsActivated)
             return;
 
         if (damageTimer.Check(Time.deltaTime))

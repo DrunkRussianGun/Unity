@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +8,11 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         if (planeForWalk)
-            planeVertices = planeForWalk.GetComponent<MeshFilter>()?.sharedMesh.vertices;
+            PlaneVertices = planeForWalk.GetComponent<MeshFilter>()?.sharedMesh.vertices;
     }
 
     public GameObject planeForWalk;
-    internal Vector3[] planeVertices;
+    internal Vector3[] PlaneVertices;
 
     public bool hasGameStarted;
     

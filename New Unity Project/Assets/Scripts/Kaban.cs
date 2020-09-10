@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,7 +15,7 @@ public class Kaban : EntityWithHealth
 
     protected override void Start()
     {
-        KabanManager.instance.kabans.Add(this);
+        KabanManager.Instance.Kabans.Add(this);
         
         agent = GetComponent<NavMeshAgent>();
         base.Start();
@@ -26,12 +24,12 @@ public class Kaban : EntityWithHealth
     protected override void Update()
     {
         base.Update();
-        if (!isAlive || !GameManager.Instance.hasGameStarted)
+        if (!IsAlive || !GameManager.Instance.hasGameStarted)
             return;
 
-        targetBuilding = BuildingManager.instance.buildings.Contains(targetBuilding)
+        targetBuilding = BuildingManager.Instance.Buildings.Contains(targetBuilding)
             ? targetBuilding
-            : BuildingManager.instance.buildings
+            : BuildingManager.Instance.Buildings
                 .FirstOrDefault(
                     x => Vector3.Distance(x.transform.position, transform.position) < lookRadius);
 
@@ -49,7 +47,7 @@ public class Kaban : EntityWithHealth
     Vector3? GetRandomPointOnPlane()
     {
         var planeForWalk = GameManager.Instance.planeForWalk;
-        var planeVertices = GameManager.Instance.planeVertices;
+        var planeVertices = GameManager.Instance.PlaneVertices;
         if (planeVertices == null)
             return null;
 
@@ -82,6 +80,6 @@ public class Kaban : EntityWithHealth
     {
         base.Destroy();
 
-        KabanManager.instance.kabans.Remove(this);
+        KabanManager.Instance.Kabans.Remove(this);
     }
 }
