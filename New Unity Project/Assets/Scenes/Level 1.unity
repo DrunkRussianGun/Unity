@@ -942,7 +942,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 18
+  m_Radius: 20
   m_Center: {x: -0.20675278, y: 4.888109, z: -15.774737}
 --- !u!4 &638617648
 Transform:
@@ -1256,10 +1256,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fde2d1ad3b7a3d45b8691a424204bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnPosition: {fileID: 761573259}
-  SpawnObject: {fileID: 1623873259387356999, guid: ab607b5176a56d44495fa709f6354a0f,
+  spawnPosition: {fileID: 761573259}
+  spawnObject: {fileID: 1623873259387356999, guid: ab607b5176a56d44495fa709f6354a0f,
     type: 3}
-  TimeForNewSpawn: 15
+  timeForNewSpawn: 15
 --- !u!1001 &772382184
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2661,6 +2661,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planeForWalk: {fileID: 1267405933}
+  hasGameStarted: 0
   go: {fileID: 0}
 --- !u!114 &1330970801
 MonoBehaviour:
