@@ -1956,7 +1956,7 @@ MonoBehaviour:
   distance: 12
   xSpeed: 120
   ySpeed: 120
-  yMinLimit: -20
+  yMinLimit: 2
   yMaxLimit: 80
   distanceMin: 0.5
   distanceMax: 15
@@ -4393,12 +4393,12 @@ PrefabInstance:
     - target: {fileID: 6840722454260649083, guid: 1ce8d8d415d02e44787108b85948f76f,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6840722454260649083, guid: 1ce8d8d415d02e44787108b85948f76f,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6840722454411936491, guid: 1ce8d8d415d02e44787108b85948f76f,
         type: 3}
@@ -4513,7 +4513,7 @@ PrefabInstance:
     - target: {fileID: 6840722454411936495, guid: 1ce8d8d415d02e44787108b85948f76f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6840722455522580866, guid: 1ce8d8d415d02e44787108b85948f76f,
         type: 3}
