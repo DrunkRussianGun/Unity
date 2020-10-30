@@ -81,7 +81,7 @@ MonoBehaviour:
   canBeUpgradedTo: {fileID: 2992391769509382758, guid: c82280679e62d4b4193f641c110dd4cb,
     type: 3}
   moneyAndFoodInterval: 1
-  moneyIncrement: 4
+  moneyIncrement: 30
   foodIncrement: 0
   cost: 250
 --- !u!65 &2529504673752025332
