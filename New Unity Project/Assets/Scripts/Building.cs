@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Building : EntityWithHealth
 {
-	internal bool isActivated;
+	internal bool IsActivated;
 
 	 [HideInInspector]
     public Vector2Int Size = Vector2Int.one;
@@ -30,7 +28,7 @@ public class Building : EntityWithHealth
 
     protected override void Update()
     {
-		if (!isActivated)
+		if (!IsActivated || !GameManager.Instance.hasGameStarted)
 			return;
 
 		base.Update();
@@ -44,15 +42,17 @@ public class Building : EntityWithHealth
 
 	public void Activate()
 	{
-        BuildingManager.instance.buildings.Add(this);
+        BuildingManager.Instance.Buildings.Add(this);
 		gameObject.GetComponent<BoxCollider>().enabled = true;
-		isActivated = true;
+		IsActivated = true;
+
+		GameManager.Instance.hasGameStarted = true;
 	}
 
 	public override void Destroy()
 	{
-        BuildingManager.instance.buildings.Remove(this);
-		isActivated = false;
+        BuildingManager.Instance.Buildings.Remove(this);
+		IsActivated = false;
 		base.Destroy();
 	}
 
@@ -70,12 +70,12 @@ public class Building : EntityWithHealth
 
     void OnCollisionEnter(Collision collision)
     {
-		PushAway(collision.rigidbody, BuildingManager.instance.pushingAwayForceOnEnter, ForceMode.Impulse);
+		PushAway(collision.rigidbody, BuildingManager.Instance.pushingAwayForceOnEnter, ForceMode.Impulse);
     }
 
     void OnCollisionStay(Collision collision)
     {
-		PushAway(collision.rigidbody, BuildingManager.instance.pushingAwayForceOnStay, ForceMode.VelocityChange);
+		PushAway(collision.rigidbody, BuildingManager.Instance.pushingAwayForceOnStay, ForceMode.VelocityChange);
     }
 
 	void PushAway(Rigidbody rigidbody, float forceMultiplier, ForceMode forceMode)

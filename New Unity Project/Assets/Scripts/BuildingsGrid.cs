@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BuildingsGrid : MonoBehaviour
 {
     public Vector2Int GridSize = new Vector2Int(10, 10);
 
-    public static Building[,] grid;
+    public static Building[,] Grid;
     private Building flyingBuilding;
     private Camera mainCamera;
 
     private void Awake()
     {
-        grid = new Building[GridSize.x, GridSize.y];
+        Grid = new Building[GridSize.x, GridSize.y];
 
         mainCamera = Camera.main;
     }
@@ -76,7 +74,7 @@ public class BuildingsGrid : MonoBehaviour
         {
             for (int y = 0; y < flyingBuilding.Size.y; y++)
             {
-                if (grid[placeX + x, placeY + y] != null) return true;
+                if (Grid[placeX + x, placeY + y] != null) return true;
             }
         }
 
@@ -89,7 +87,7 @@ public class BuildingsGrid : MonoBehaviour
         {
             for (int y = 0; y < flyingBuilding.Size.y; y++)
             {
-                grid[placeX + x, placeY + y] = flyingBuilding;
+                Grid[placeX + x, placeY + y] = flyingBuilding;
             }
         }
         

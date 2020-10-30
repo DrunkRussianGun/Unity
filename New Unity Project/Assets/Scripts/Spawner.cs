@@ -1,36 +1,30 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Spawner : MonoBehaviour
 {
-    public Transform SpawnPosition;
-    public GameObject SpawnObject; 
-    public float TimeForNewSpawn;
+    [FormerlySerializedAs("SpawnPosition")] public Transform spawnPosition;
+    [FormerlySerializedAs("SpawnObject")] public GameObject spawnObject; 
+    [FormerlySerializedAs("TimeForNewSpawn")] public float timeForNewSpawn;
 
     void Start()
     {
-        StartCoroutine(SpawnCD());
+        StartCoroutine(SpawnCd());
     }
 
     void Repeat()
     {
-        StartCoroutine(SpawnCD());
+        StartCoroutine(SpawnCd());
     }
     
-    IEnumerator SpawnCD()
+    IEnumerator SpawnCd()
     {
-    	yield return new WaitForSeconds(TimeForNewSpawn);
-        CreateKaban();
-    	Repeat();
-    }
+    	yield return new WaitForSeconds(timeForNewSpawn);
 
-    private void CreateKaban()
-    {
-        if (BuildingManager.instance.buildings.Count == 0)
-            return;
-        
-    	var kaban = Instantiate(SpawnObject, SpawnPosition.position, SpawnPosition.rotation);
+		if (KabanManager.Instance.Kabans.Count < BuildingManager.Instance.Buildings.Count * 2)
+        	Instantiate(spawnObject, spawnPosition.position, spawnPosition.rotation);
+
+    	Repeat();
     }
 }

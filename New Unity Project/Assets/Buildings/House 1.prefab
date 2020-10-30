@@ -56,7 +56,7 @@ MonoBehaviour:
   isFood: 0
   canBeUpgradedTo: {fileID: 0}
   moneyAndFoodInterval: 1
-  moneyIncrement: 6
+  moneyIncrement: 50
   foodIncrement: 0
   cost: 0
 --- !u!65 &2529504673752025332
