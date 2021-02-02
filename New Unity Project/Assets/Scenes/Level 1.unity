@@ -1896,14 +1896,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 442785966}
-  xSpeed: 2.5
-  xSpeedDistanceFactor: 1
-  ySpeed: 2.5
+  xSpeed: 3
+  xSpeedDistanceFactor: 0.075
+  ySpeed: 3
   zSpeed: 5
-  yMinLimit: 2
+  yMinLimit: 5
   yMaxLimit: 80
   distance: 12
-  distanceMin: 0.5
+  distanceMin: 3
   distanceMax: 15
 --- !u!1001 &1013813447
 PrefabInstance:
