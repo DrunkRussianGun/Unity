@@ -5,7 +5,9 @@ public class CameraController : MonoBehaviour
 {
 	public Transform target;
 	public float xSpeed;
+	public float xSpeedDistanceFactor;
 	public float ySpeed;
+	public float zSpeed;
 
 	public float yMinLimit;
 	public float yMaxLimit;
@@ -39,7 +41,7 @@ public class CameraController : MonoBehaviour
 
 		if (Input.GetMouseButton(1)) 
 		{
-			x += Input.GetAxis("Mouse X") * xSpeed * distance;
+			x += Input.GetAxis("Mouse X") * xSpeed * Mathf.Pow(distance, xSpeedDistanceFactor);
 			y -= Input.GetAxis("Mouse Y") * ySpeed;
 		}
 
@@ -47,7 +49,7 @@ public class CameraController : MonoBehaviour
 
 		if (Input.GetAxis("Mouse ScrollWheel") != 0)
 		{
-			distance -= Input.GetAxis("Mouse ScrollWheel") * 5;
+			distance -= Input.GetAxis("Mouse ScrollWheel") * zSpeed;
 			distance = Mathf.Clamp(distance, distanceMin, distanceMax);
 		}
 
