@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-[AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
-public class MouseOrbitImproved : MonoBehaviour
+[AddComponentMenu("Camera-Control/Camera with zoom")]
+public class CameraController : MonoBehaviour
 {
 	public Transform target;
 	public float xSpeed;
