@@ -16,6 +16,9 @@ public class CameraController : MonoBehaviour
 	public float distanceMin;
 	public float distanceMax;
 
+	public float distanceFromObstacles;
+	public LayerMask obstacleLayers;
+
 	private Rigidbody rigidbody;
 
 	private float x;
@@ -53,9 +56,17 @@ public class CameraController : MonoBehaviour
 			distance = Mathf.Clamp(distance, distanceMin, distanceMax);
 		}
 
+		var targetPosition = target.position;
 		var rotation = Quaternion.Euler(y, x, 0f);
 		var negativeDistance = new Vector3(0f, 0f, -distance);
-		var position = target.position + rotation * negativeDistance;
+		var position = targetPosition + rotation * negativeDistance;
+
+		var obstacleHit = GetObstacleHit(targetPosition, position);
+		if (obstacleHit != null)
+		{
+			obstacleHit.Value.normal.Scale(new Vector3(1, 1, 0));
+			position = obstacleHit.Value.point + obstacleHit.Value.normal * distanceFromObstacles;
+		}
 
 		transform.rotation = rotation;
 		transform.position = position;
@@ -68,5 +79,13 @@ public class CameraController : MonoBehaviour
 		if (angle > 360f)
 			angle -= 360f;
 		return Mathf.Clamp(angle, min, max);
+	}
+
+	private RaycastHit? GetObstacleHit(Vector3 targetPosition, Vector3 cameraPosition)
+	{
+		if (!Physics.Linecast(targetPosition, cameraPosition, out var obstacleHit, obstacleLayers))
+			return null;
+
+		return obstacleHit;
 	}
 }

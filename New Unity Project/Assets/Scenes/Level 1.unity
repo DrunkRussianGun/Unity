@@ -1905,6 +1905,10 @@ MonoBehaviour:
   distance: 12
   distanceMin: 3
   distanceMax: 15
+  distanceFromObstacles: 0.5
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1001 &1013813447
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1977,7 +1981,7 @@ GameObject:
   - component: {fileID: 1048360839}
   - component: {fileID: 1048360838}
   - component: {fileID: 1048360837}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
