@@ -47,6 +47,8 @@ MonoBehaviour:
   healthInterval: 1
   healthIncrement: 10
   lookRadius: 10
+  wanderRadius: 10
+  wanderPointRadius: 1
   onBuildingEnterDamage: 15
   onBuildingStayDamage: 1
 --- !u!195 &1324452537
@@ -69,7 +71,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 15
   m_BaseOffset: 0
-  m_WalkableMask: 4294967295
+  m_WalkableMask: 5
   m_ObstacleAvoidanceType: 3
 --- !u!1001 &1893836150243015190
 PrefabInstance:

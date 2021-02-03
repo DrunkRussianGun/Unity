@@ -6,11 +6,14 @@ using UnityEngine.AI;
 public class Kaban : EntityWithHealth
 {
 	public float lookRadius = 10f;
+	public float wanderRadius;
+	public float wanderPointRadius;
+
 	public int onBuildingEnterDamage = 15;
 	public int onBuildingStayDamage = 1;
 
 	private Building targetBuilding;
-	private Vector3? targetPoint;
+	private Vector3? wanderPoint;
 	private NavMeshAgent agent;
 
 	protected override void Start()
@@ -33,31 +36,36 @@ public class Kaban : EntityWithHealth
 				.FirstOrDefault(
 					x => Vector3.Distance(x.transform.position, transform.position) < lookRadius);
 
-		if (targetBuilding == null)
+		if (!(targetBuilding is null))
 		{
-			if (targetPoint == null || agent.remainingDistance < 0.1f)
-				targetPoint = GetRandomPointOnPlane();
-			if (targetPoint.HasValue)
-				agent.SetDestination(targetPoint.Value);
-		}
-		else
 			agent.SetDestination(targetBuilding.transform.position);
+			return;
+		}
+
+		if (wanderPoint == null || agent.remainingDistance <= wanderPointRadius)
+			wanderPoint = GetWanderPoint();
+		if (wanderPoint.HasValue)
+			agent.SetDestination(wanderPoint.Value);
 	}
 
-	Vector3? GetRandomPointOnPlane()
+	private Vector3? GetWanderPoint()
 	{
-		var planeForWalk = GameManager.Instance.planeForWalk;
-		var planeVertices = GameManager.Instance.PlaneVertices;
-		if (planeVertices == null)
-			return null;
+		Vector3 randomPoint = transform.position + Random.insideUnitSphere * wanderRadius;
+		if (NavMesh.SamplePosition(randomPoint, out var hit, 1f, KabanManager.Instance.WalkableAreasMask)
+			&& agent.CalculatePath(hit.position, new NavMeshPath()))
+			return hit.position;
 
-		var leftTop = planeForWalk.transform.TransformPoint(planeVertices[0]);
-		var rightTop = planeForWalk.transform.TransformPoint(planeVertices[10]);
-		var leftBottom = planeForWalk.transform.TransformPoint(planeVertices[110]);
-		var rightBottom = planeForWalk.transform.TransformPoint(planeVertices[120]);
-		var xAxis = rightTop - leftTop;
-		var zAxis = leftBottom - leftTop;
-		return leftTop + xAxis * Random.value + zAxis * Random.value;
+		return null;
+	}
+
+	public void OnDrawGizmos()
+	{
+		// ReSharper disable once InvertIf
+		if (wanderPoint.HasValue)
+		{
+			Gizmos.color = Color.magenta;
+			Gizmos.DrawWireSphere(wanderPoint.Value, wanderPointRadius);
+		}
 	}
 
 	void OnDrawGizmosSelected()

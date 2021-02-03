@@ -7,12 +7,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        if (planeForWalk)
-            PlaneVertices = planeForWalk.GetComponent<MeshFilter>()?.sharedMesh.vertices;
     }
-
-    public GameObject planeForWalk;
-    internal Vector3[] PlaneVertices;
 
     public bool hasGameStarted;
     
