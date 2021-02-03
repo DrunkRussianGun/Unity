@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class KabanManager : MonoBehaviour
 {
-    #region Singletone
+	#region Singletone
 
-    public static KabanManager Instance;
+	public static KabanManager Instance;
 
-    void Awake()
-    {
-        Instance = this;
-    }
+	void Awake()
+	{
+		Instance = this;
+	}
 
-    #endregion
+	#endregion
 
-    public ISet<Kaban> Kabans = new HashSet<Kaban>();
+	public readonly ISet<Kaban> Kabans = new HashSet<Kaban>();
 }
