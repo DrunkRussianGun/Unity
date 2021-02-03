@@ -83,9 +83,28 @@ public class CameraController : MonoBehaviour
 
 	private RaycastHit? GetObstacleHit(Vector3 targetPosition, Vector3 cameraPosition)
 	{
-		if (!Physics.Linecast(targetPosition, cameraPosition, out var obstacleHit, obstacleLayers))
-			return null;
+		const int maxHitCount = 10;
+		var currentHitCount = 0;
 
-		return obstacleHit;
+		var direction = (cameraPosition - targetPosition).normalized;
+		var currentPosition = targetPosition;
+		while (Physics.Linecast(currentPosition, cameraPosition, out var obstacleHit, obstacleLayers)
+		       && currentHitCount < maxHitCount)
+		{
+			if (obstacleHit.collider.bounds.Contains(cameraPosition))
+				return obstacleHit;
+
+			currentPosition = obstacleHit.point + direction * distanceFromObstacles;
+			++currentHitCount;
+		}
+
+		// ReSharper disable once InvertIf
+		if (currentHitCount == maxHitCount)
+		{
+			Physics.Linecast(targetPosition, cameraPosition, out var firstObstacleHit, obstacleLayers);
+			return firstObstacleHit;
+		}
+
+		return null;
 	}
 }
