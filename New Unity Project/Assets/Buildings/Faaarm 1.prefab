@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8027520369327014387}
   - component: {fileID: -9020137017180466602}
   - component: {fileID: 7249124161031002523}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Faaarm 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,8 +71,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.8, z: 0.5}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.4191234, y: 0.30654916, z: 0.30363724}
+  m_Center: {x: -0.057451926, y: 0.14895634, z: 0.028497081}
 --- !u!114 &-9020137017180466602
 MonoBehaviour:
   m_ObjectHideFlags: 0

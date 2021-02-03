@@ -27,8 +27,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 16.041008, y: 20.699816, z: 20.384617}
-  m_Center: {x: 0.32860994, y: 9.849909, z: -2.210989}
+  m_Size: {x: 15.2, y: 20.52736, z: 25.75}
+  m_Center: {x: 0.37, y: 9.936136, z: 0.7500005}
 --- !u!114 &1324452536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +162,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Kaban
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eadc5f1efeaa1af4ab561cb4dcaef42d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1151388028547126963, guid: eadc5f1efeaa1af4ab561cb4dcaef42d,
         type: 3}
