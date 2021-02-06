@@ -13,7 +13,8 @@ public class Kaban : EntityWithHealth
 	{
 		Running,
 		Stopping,
-		Turning
+		Turning,
+		Falling
 	}
 
 	public float lookRadius = 10f;
@@ -39,6 +40,9 @@ public class Kaban : EntityWithHealth
 	private float maxAngularVelocityInDeg => navigationAgent.angularSpeed;
 	private float maxAcceleration => navigationAgent.acceleration;
 
+	private HashSet<GameObject> groundObjectsInContact = new HashSet<GameObject>();
+	private bool isFalling => groundObjectsInContact.Count == 0;
+
 	private const float zeroVelocity = 0.1f;
 	private const float zeroCos = 0.02f; // arccos 0.02 ≈ 88,854°
 	private const float zeroAngleInDeg = 90 - 88.854f;
@@ -46,9 +50,10 @@ public class Kaban : EntityWithHealth
 	private static readonly IReadOnlyDictionary<NavigationState, Color> navigationStateColors =
 		new Dictionary<NavigationState, Color>
 		{
-			[NavigationState.Running] = Color.clear,
+			[NavigationState.Running] = Color.clear, 
 			[NavigationState.Stopping] = Color.red,
-			[NavigationState.Turning] = Color.yellow
+			[NavigationState.Turning] = Color.yellow,
+			[NavigationState.Falling] = Color.cyan
 		};
 
 	public Kaban()
@@ -57,7 +62,8 @@ public class Kaban : EntityWithHealth
 		{
 			[NavigationState.Running] = Run,
 			[NavigationState.Stopping] = Stop,
-			[NavigationState.Turning] = Turn
+			[NavigationState.Turning] = Turn,
+			[NavigationState.Falling] = Fall
 		};
 	}
 
@@ -150,6 +156,31 @@ public class Kaban : EntityWithHealth
 		}
 	}
 
+	public void OnCollisionEnter(Collision collision)
+	{
+		if (collision.gameObject.layer.In(GameManager.Instance.groundLayers))
+		{
+			groundObjectsInContact.Add(collision.gameObject);
+			RemoveNonExistentGroundObjects();
+		}
+
+		collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingEnterDamage);
+	}
+
+	public void OnCollisionStay(Collision collision)
+	{
+		collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingStayDamage);
+	}
+
+	public void OnCollisionExit(Collision collision)
+	{
+		if (collision.gameObject.layer.In(GameManager.Instance.groundLayers))
+		{
+			groundObjectsInContact.Remove(collision.gameObject);
+			RemoveNonExistentGroundObjects();
+		}
+	}
+
 	private Building GetTargetBuilding()
 	{
 		var buildings = BuildingManager.Instance.Buildings;
@@ -191,6 +222,9 @@ public class Kaban : EntityWithHealth
 
 	private NavigationState Run(Vector3 target)
 	{
+		if (isFalling)
+			return NavigationState.Falling;
+
 		navigationAgent.SetDestination(target);
 		if (IsMissingTarget())
 			return NavigationState.Stopping;
@@ -199,6 +233,11 @@ public class Kaban : EntityWithHealth
 			navigationAgent.desiredVelocity, transform.up);
 		rigidbody.rotation *= transform.GetTurn(
 			velocityHorizontalProjection,
+			maxAngularVelocityInDeg * Time.deltaTime);
+		var velocityVerticalProjection = Vector3.ProjectOnPlane(
+			navigationAgent.desiredVelocity, transform.right);
+		rigidbody.rotation *= transform.GetTurn(
+			velocityVerticalProjection,
 			maxAngularVelocityInDeg * Time.deltaTime);
 
 		rigidbody.velocity += transform.GetAcceleratingVelocity(
@@ -212,8 +251,14 @@ public class Kaban : EntityWithHealth
 		if (velocity.magnitude < zeroVelocity)
 			return false;
 
-		var velocityNormal = velocity.GetNormalInPlaneWith(navigationAgent.desiredVelocity);
-		var angleInDeg = Vector3.Angle(navigationAgent.desiredVelocity, velocityNormal);
+		var up = transform.up;
+		var desiredVelocityProjection = Vector3.ProjectOnPlane(
+			navigationAgent.desiredVelocity, up);
+		var velocityNormal = Vector3
+			.ProjectOnPlane(velocity, up)
+			.GetNormalInPlaneWith(desiredVelocityProjection);
+
+		var angleInDeg = Vector3.Angle(desiredVelocityProjection, velocityNormal);
 		var cos = Mathf.Cos(angleInDeg * Mathf.Deg2Rad);
 		if (cos < 0)
 			return true;
@@ -228,6 +273,8 @@ public class Kaban : EntityWithHealth
 
 	private NavigationState Stop(Vector3 target)
 	{
+		if (isFalling)
+			return NavigationState.Falling;
 		if (velocity.magnitude < zeroVelocity)
 			return NavigationState.Turning;
 
@@ -243,6 +290,9 @@ public class Kaban : EntityWithHealth
 
 	private NavigationState Turn(Vector3 target)
 	{
+		if (isFalling)
+			return NavigationState.Falling;
+
 		var velocityHorizontalProjection = Vector3.ProjectOnPlane(
 			navigationAgent.desiredVelocity, transform.up);
 		if (Vector3.Angle(transform.forward, velocityHorizontalProjection) < zeroAngleInDeg)
@@ -255,6 +305,9 @@ public class Kaban : EntityWithHealth
 		return NavigationState.Turning;
 	}
 
+	private NavigationState Fall(Vector3 target)
+		=> isFalling ? NavigationState.Falling : NavigationState.Running;
+
 	private void KeepNavigationAgentAtRigidbody()
 	{
 		var transformScale = transform.localScale;
@@ -265,13 +318,6 @@ public class Kaban : EntityWithHealth
 		navigationAgent.velocity = velocity;
 	}
 
-	void OnCollisionEnter(Collision collision)
-	{
-		collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingEnterDamage);
-	}
-
-	void OnCollisionStay(Collision collision)
-	{
-		collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingStayDamage);
-	}
+	private void RemoveNonExistentGroundObjects()
+		=> groundObjectsInContact.RemoveWhere(x => !x);
 }
