@@ -1,4 +1,5 @@
 ﻿using System;
+using Helpers;
 using UnityEngine;
 
 public abstract class EntityWithHealth : MonoBehaviour

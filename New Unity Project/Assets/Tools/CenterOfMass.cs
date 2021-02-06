@@ -1,28 +1,31 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
-[ExecuteInEditMode]
-public class CenterOfMass : MonoBehaviour
+namespace Tools
 {
-	public Transform centerOfMass;
-
-	[SuppressMessage("ReSharper", "Unity.PerformanceCriticalCodeInvocation")]
-	public void OnEnable()
+	[ExecuteInEditMode]
+	public class CenterOfMass : MonoBehaviour
 	{
-		GetComponent<Rigidbody>().centerOfMass = Vector3.Scale(centerOfMass.localPosition, transform.localScale);
-	}
+		public Transform centerOfMass;
 
-	#if UNITY_EDITOR
-	public void Update()
-	{
-		// ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-		OnEnable();
-	}
-	#endif
+		[SuppressMessage("ReSharper", "Unity.PerformanceCriticalCodeInvocation")]
+		public void OnEnable()
+		{
+			GetComponent<Rigidbody>().centerOfMass = Vector3.Scale(centerOfMass.localPosition, transform.localScale);
+		}
 
-	public void OnDrawGizmosSelected()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawSphere(GetComponent<Rigidbody>().worldCenterOfMass, 0.1f);
+		#if UNITY_EDITOR
+		public void Update()
+		{
+			// ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+			OnEnable();
+		}
+		#endif
+
+		public void OnDrawGizmosSelected()
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawSphere(GetComponent<Rigidbody>().worldCenterOfMass, 0.1f);
+		}
 	}
 }

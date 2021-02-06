@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
-public static class GeometryHelper
+namespace Helpers
 {
-	public static Vector3 GetNormalInPlaneWith(this Vector3 vector, Vector3 vectorInPlane)
+	public static class GeometryHelper
 	{
-		var velocityNormal = Vector3.Cross(vector, vectorInPlane);
-		velocityNormal = Vector3.Cross(vector, velocityNormal);
-		return -velocityNormal;
+		public static Vector3 GetNormalInPlaneWith(this Vector3 vector, Vector3 vectorInPlane)
+		{
+			var velocityNormal = Vector3.Cross(vector, vectorInPlane);
+			velocityNormal = Vector3.Cross(vector, velocityNormal);
+			return -velocityNormal;
+		}
 	}
 }
