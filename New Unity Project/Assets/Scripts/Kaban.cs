@@ -17,7 +17,7 @@ public class Kaban : EntityWithHealth
 
 	public float lookRadius = 10f;
 	public float wanderRadius;
-	public float wanderPointRadius; 
+	public float wanderPointRadius;
 	
 	public int onBuildingEnterDamage = 15;
 	public int onBuildingStayDamage = 1;
@@ -28,6 +28,7 @@ public class Kaban : EntityWithHealth
 	private NavigationState navigationState;
 	private NavMeshAgent navigationAgent;
 	private new Rigidbody rigidbody;
+	private new BoxCollider collider;
 
 	private readonly IReadOnlyDictionary<NavigationState, Func<Vector3, NavigationState>> navigationActions;
 
@@ -36,6 +37,18 @@ public class Kaban : EntityWithHealth
 	private float maxVelocity => navigationAgent.speed;
 	private float maxAngularVelocityInDeg => navigationAgent.angularSpeed;
 	private float maxAcceleration => navigationAgent.acceleration;
+
+	private const float zeroVelocity = 0.1f;
+	private const float zeroCos = 0.02f; // arccos 0.02 ≈ 88,854°
+	private const float zeroAngleInDeg = 90 - 88.854f;
+
+	private static readonly IReadOnlyDictionary<NavigationState, Color> navigationStateColors =
+		new Dictionary<NavigationState, Color>
+		{
+			[NavigationState.Running] = Color.clear,
+			[NavigationState.Stopping] = Color.red,
+			[NavigationState.Turning] = Color.yellow
+		};
 
 	public Kaban()
 	{
@@ -57,6 +70,7 @@ public class Kaban : EntityWithHealth
 		navigationAgent.updateRotation = false;
 
 		rigidbody = GetComponent<Rigidbody>();
+		collider = GetComponent<BoxCollider>();
 
 		base.Start();
 	}
@@ -106,6 +120,19 @@ public class Kaban : EntityWithHealth
 			Gizmos.DrawLine(position, position + navigationAgent.desiredVelocity);
 			Gizmos.color = Color.green;
 			Gizmos.DrawLine(position, position + rigidbody.velocity);
+		}
+		
+		if (!navigationStateColors.TryGetValue(navigationState, out var navigationStateColor))
+			throw new ArgumentException($"Не нашёл цвет состояния {typeof(NavigationState)}.{navigationState}");
+
+		if (collider)
+		{
+			var colliderSize = Vector3.Scale(collider.size, transform.localScale);
+			var longestColliderEdge = Mathf.Max(colliderSize.x, colliderSize.y, colliderSize.z);
+			Gizmos.color = navigationStateColor;
+			Gizmos.DrawWireCube(
+				transform.TransformPoint(collider.center),
+				new Vector3(longestColliderEdge, longestColliderEdge, longestColliderEdge));
 		}
 	}
 
@@ -167,16 +194,52 @@ public class Kaban : EntityWithHealth
 		return NavigationState.Running;
 	}
 
-	private bool IsMissingTarget() => false;
+	private bool IsMissingTarget()
+	{
+		if (velocity.magnitude < zeroVelocity)
+			return false;
+
+		var velocityNormal = velocity.GetNormalInPlaneWith(navigationAgent.desiredVelocity);
+		var angleInDeg = Vector3.Angle(navigationAgent.desiredVelocity, velocityNormal);
+		var cos = Mathf.Cos(angleInDeg * Mathf.Deg2Rad);
+		if (cos < 0)
+			return true;
+		if (cos < zeroCos)
+			return false;
+
+		var minRadius = velocity.magnitude / (maxAngularVelocityInDeg * Mathf.Deg2Rad);
+		var radiusToReachTarget = Vector3.Distance(navigationAgent.steeringTarget, position)
+			/ (cos * 2);
+		return radiusToReachTarget < minRadius;
+	}
 
 	private NavigationState Stop(Vector3 target)
 	{
-		throw new NotImplementedException();
+		if (velocity.magnitude < zeroVelocity)
+			return NavigationState.Turning;
+
+		var deceleratingVelocity = -transform.GetAcceleratingVelocity(
+			velocity, maxAcceleration * Time.deltaTime, maxVelocity);
+		var deceleratedVelocity = velocity - deceleratingVelocity;
+		rigidbody.velocity = deceleratedVelocity.magnitude < velocity.magnitude
+			? deceleratedVelocity
+			: Vector3.zero;
+
+		return NavigationState.Stopping;
 	}
 
 	private NavigationState Turn(Vector3 target)
 	{
-		throw new NotImplementedException();
+		var velocityHorizontalProjection = Vector3.ProjectOnPlane(
+			navigationAgent.desiredVelocity, transform.up);
+		if (Vector3.Angle(transform.forward, velocityHorizontalProjection) < zeroAngleInDeg)
+			return NavigationState.Running;
+		
+		rigidbody.rotation *= transform.GetTurn(
+			velocityHorizontalProjection,
+			maxAngularVelocityInDeg * Time.deltaTime);
+
+		return NavigationState.Turning;
 	}
 
 	private void KeepNavigationAgentAtRigidbody()
