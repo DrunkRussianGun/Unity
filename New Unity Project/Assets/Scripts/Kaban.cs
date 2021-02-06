@@ -81,6 +81,7 @@ public class Kaban : EntityWithHealth
 		if (!IsAlive || !GameManager.Instance.hasGameStarted)
 			return;
 
+		// ReSharper disable once Unity.PerformanceCriticalCodeInvocation
 		targetBuilding = GetTargetBuilding();
 		if (targetBuilding)
 		{
@@ -151,10 +152,21 @@ public class Kaban : EntityWithHealth
 	private Building GetTargetBuilding()
 	{
 		var buildings = BuildingManager.Instance.Buildings;
-		return buildings.Contains(targetBuilding)
-			? targetBuilding
-			: buildings.FirstOrDefault(
-				building => Vector3.Distance(building.transform.position, position) < lookRadius);
+		if (buildings.Contains(targetBuilding))
+			return targetBuilding;
+
+		var buildingsWithinLookRadius = buildings
+			.Where(building => Vector3.Distance(building.transform.position, position) < lookRadius)
+			.ToArray();
+		if (buildingsWithinLookRadius.Length == 0)
+			return null;
+
+		var tower = buildingsWithinLookRadius
+			.FirstOrDefault(building => building.GetComponent<Tower>());
+		if (tower)
+			return tower;
+
+		return buildingsWithinLookRadius.FirstOrDefault();
 	}
 
 	private Vector3? GetWanderPoint()
