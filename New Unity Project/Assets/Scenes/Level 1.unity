@@ -1248,10 +1248,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 273aafbd147aec044a0f20c7242a83ca, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 273aafbd147aec044a0f20c7242a83ca, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.08
@@ -2751,9 +2747,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasGameStarted: 0
   go: {fileID: 0}
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 768
 --- !u!114 &1330970801
 MonoBehaviour:
   m_ObjectHideFlags: 0

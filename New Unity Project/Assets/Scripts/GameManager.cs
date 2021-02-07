@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
     
     public GameObject go;
 
-	public LayerMask groundLayers;
-
     // Update is called once per frame
     void Update()
     {

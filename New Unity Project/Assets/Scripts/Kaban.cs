@@ -14,8 +14,7 @@ public class Kaban : EntityWithHealth
 		Running,
 		ForceRunning,
 		Stopping,
-		Turning,
-		Falling
+		Turning
 	}
 
 	public float lookRadius = 10f;
@@ -48,9 +47,6 @@ public class Kaban : EntityWithHealth
 
 	private Vector3? lastSteeringTarget;
 
-	private HashSet<GameObject> groundObjectsInContact = new HashSet<GameObject>();
-	private bool isFalling => groundObjectsInContact.Count == 0;
-
 	private Vector3 lastPosition;
 	private bool isHung;
 	private UpdateTimer hungChecker;
@@ -66,8 +62,7 @@ public class Kaban : EntityWithHealth
 			[NavigationState.Running] = Color.clear, 
 			[NavigationState.ForceRunning] = Colors.Orange,
 			[NavigationState.Stopping] = Color.red,
-			[NavigationState.Turning] = Color.yellow,
-			[NavigationState.Falling] = Color.cyan
+			[NavigationState.Turning] = Color.yellow
 		};
 
 	public Kaban()
@@ -77,8 +72,7 @@ public class Kaban : EntityWithHealth
 			[NavigationState.Running] = Run,
 			[NavigationState.ForceRunning] = ForceRun,
 			[NavigationState.Stopping] = Stop,
-			[NavigationState.Turning] = Turn,
-			[NavigationState.Falling] = Fall
+			[NavigationState.Turning] = Turn
 		};
 	}
 
@@ -179,27 +173,12 @@ public class Kaban : EntityWithHealth
 
 	public void OnCollisionEnter(Collision collision)
 	{
-		if (collision.gameObject.layer.In(GameManager.Instance.groundLayers))
-		{
-			groundObjectsInContact.Add(collision.gameObject);
-			RemoveNonExistentGroundObjects();
-		}
-
 		collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingEnterDamage);
 	}
 
 	public void OnCollisionStay(Collision collision)
 	{
 		collision.gameObject.GetComponent<Building>()?.TakeDamage(onBuildingStayDamage);
-	}
-
-	public void OnCollisionExit(Collision collision)
-	{
-		if (collision.gameObject.layer.In(GameManager.Instance.groundLayers))
-		{
-			groundObjectsInContact.Remove(collision.gameObject);
-			RemoveNonExistentGroundObjects();
-		}
 	}
 
 	private bool IsHung()
@@ -254,8 +233,6 @@ public class Kaban : EntityWithHealth
 
 	private NavigationState Run(Vector3 target)
 	{
-		if (isFalling)
-			return NavigationState.Falling;
 		if (isHung)
 			return NavigationState.ForceRunning;
 
@@ -269,9 +246,6 @@ public class Kaban : EntityWithHealth
 
 	private NavigationState ForceRun(Vector3 target)
 	{
-		if (isFalling)
-			return NavigationState.Falling;
-
 		if (lastSteeringTarget.HasValue && lastSteeringTarget.Value != navigationAgent.steeringTarget)
 		{
 			lastSteeringTarget = null;
@@ -333,8 +307,6 @@ public class Kaban : EntityWithHealth
 
 	private NavigationState Stop(Vector3 target)
 	{
-		if (isFalling)
-			return NavigationState.Falling;
 		if (velocity.magnitude < zeroVelocity)
 			return NavigationState.Turning;
 
@@ -350,9 +322,6 @@ public class Kaban : EntityWithHealth
 
 	private NavigationState Turn(Vector3 target)
 	{
-		if (isFalling)
-			return NavigationState.Falling;
-
 		var velocityHorizontalProjection = Vector3.ProjectOnPlane(
 			navigationAgent.desiredVelocity, transform.up);
 		if (Vector3.Angle(transform.forward, velocityHorizontalProjection) < zeroAngleInDeg)
@@ -365,9 +334,6 @@ public class Kaban : EntityWithHealth
 		return NavigationState.Turning;
 	}
 
-	private NavigationState Fall(Vector3 target)
-		=> isFalling ? NavigationState.Falling : NavigationState.Running;
-
 	private void KeepNavigationAgentAtRigidbody()
 	{
 		var transformScale = transform.localScale;
@@ -377,7 +343,4 @@ public class Kaban : EntityWithHealth
 			navigationAgent.nextPosition = position;
 		navigationAgent.velocity = velocity;
 	}
-
-	private void RemoveNonExistentGroundObjects()
-		=> groundObjectsInContact.RemoveWhere(x => !x);
 }
