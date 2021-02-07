@@ -301,11 +301,6 @@ public class Kaban : EntityWithHealth
 		rigidbody.rotation *= transform.GetTurn(
 			velocityHorizontalProjection,
 			maxAngularVelocityInDeg * Time.deltaTime);
-		var velocityVerticalProjection = Vector3.ProjectOnPlane(
-			desiredVelocity, transform.right);
-		rigidbody.rotation *= transform.GetTurn(
-			velocityVerticalProjection,
-			maxAngularVelocityInDeg * Time.deltaTime);
 
 		rigidbody.velocity += transform.GetAcceleratingVelocity(
 			velocity, acceleration * Time.deltaTime, maxVelocity);
