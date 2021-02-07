@@ -106,15 +106,15 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.3
+    agentRadius: 0.5
     agentHeight: 1
-    agentSlope: 30
-    agentClimb: 0.4
+    agentSlope: 10
+    agentClimb: 0.1
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 0
     manualCellSize: 0
-    cellSize: 0.1
+    cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -1761,7 +1761,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.10460123, y: 0.10026317}
   m_AnchorMax: {x: 0.25100002, y: 0.16850878}
-  m_AnchoredPosition: {x: -57.99991, y: -35.000427}
+  m_AnchoredPosition: {x: -57.999878, y: -35.000427}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &948140405
@@ -3315,7 +3315,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.0834156, y: 0.44131932}
   m_AnchorMax: {x: 0.47300002, y: 0.65431935}
-  m_AnchoredPosition: {x: -1.9000854, y: -0.8999996}
+  m_AnchoredPosition: {x: -1.8999786, y: -0.9000015}
   m_SizeDelta: {x: 7.510971, y: 5.119301}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1710061558
@@ -3874,7 +3874,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.0834156, y: 0.052680705}
   m_AnchorMax: {x: 0.94400007, y: 0.3563193}
-  m_AnchoredPosition: {x: -3.4000244, y: -0.40000916}
+  m_AnchoredPosition: {x: -3.4000092, y: -0.40000916}
   m_SizeDelta: {x: 5.4198, y: -1.1231079}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1845727566
