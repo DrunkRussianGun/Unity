@@ -83,7 +83,7 @@ MonoBehaviour:
   onBuildingStayDamage: 1
   forceVelocity: 12.5
   forceAcceleration: 40
-  hungCheckInterval: 1
+  hungCheckInterval: 0.5
 --- !u!195 &1324452537
 NavMeshAgent:
   m_ObjectHideFlags: 0

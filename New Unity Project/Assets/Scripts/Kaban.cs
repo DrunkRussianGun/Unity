@@ -104,7 +104,11 @@ public class Kaban : EntityWithHealth
 			return;
 
 		if (hungChecker.Check(Time.deltaTime))
+		{
 			isHung = IsHung();
+			if (isHung)
+				wanderPoint = null;
+		}
 
 		AlignWithGround();
 
@@ -196,6 +200,17 @@ public class Kaban : EntityWithHealth
 
 	private bool IsHung()
 	{
+		switch (navigationState)
+		{
+			case NavigationState.Running:
+			case NavigationState.ForceRunning:
+				break;
+			case NavigationState.Stopping:
+			case NavigationState.Turning:
+				return false;
+			default:
+				throw new ArgumentException($"Неизвестное состояние {typeof(NavigationState)}.{navigationState}");
+		}
 		var currentPosition = rigidbody.position;
 		// ReSharper disable once LocalVariableHidesMember
 		var isHung = (currentPosition - lastPosition).magnitude 
