@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace Tools
@@ -6,11 +8,13 @@ namespace Tools
 	[ExecuteInEditMode]
 	public class SelectedInstanceIdLogger : MonoBehaviour
 	{
+		#if UNITY_EDITOR
+
 		#region Singleton
 
 		private static volatile bool isInitialized;
 
-		private static readonly object synchronizationLock = new object(); 
+		private static readonly object synchronizationLock = new object();
 
 		#endregion
 
@@ -18,7 +22,7 @@ namespace Tools
 		{
 			if (isInitialized)
 				return;
-			
+
 			lock (synchronizationLock)
 			{
 				if (isInitialized)
@@ -45,5 +49,6 @@ namespace Tools
 
 			Debug.Log($"Выбран объект {selectedObject.name} с ID {selectedObject.GetInstanceID()}");
 		}
+		#endif
 	}
 }
