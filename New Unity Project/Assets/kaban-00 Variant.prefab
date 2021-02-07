@@ -81,6 +81,9 @@ MonoBehaviour:
   wanderPointRadius: 1
   onBuildingEnterDamage: 15
   onBuildingStayDamage: 1
+  forceVelocity: 12.5
+  forceAcceleration: 40
+  hungCheckInterval: 1
 --- !u!195 &1324452537
 NavMeshAgent:
   m_ObjectHideFlags: 0

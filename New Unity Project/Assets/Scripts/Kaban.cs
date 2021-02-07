@@ -12,6 +12,7 @@ public class Kaban : EntityWithHealth
 	private enum NavigationState
 	{
 		Running,
+		ForceRunning,
 		Stopping,
 		Turning,
 		Falling
@@ -23,6 +24,11 @@ public class Kaban : EntityWithHealth
 	
 	public int onBuildingEnterDamage = 15;
 	public int onBuildingStayDamage = 1;
+
+	public float forceVelocity;
+	public float forceAcceleration;
+
+	public float hungCheckInterval;
 
 	private Building targetBuilding;
 	private Vector3? wanderPoint;
@@ -40,8 +46,15 @@ public class Kaban : EntityWithHealth
 	private float maxAngularVelocityInDeg => navigationAgent.angularSpeed;
 	private float maxAcceleration => navigationAgent.acceleration;
 
+	private Vector3? lastSteeringTarget;
+
 	private HashSet<GameObject> groundObjectsInContact = new HashSet<GameObject>();
 	private bool isFalling => groundObjectsInContact.Count == 0;
+
+	private Vector3 lastPosition;
+	private bool isHung;
+	private UpdateTimer hungChecker;
+	private const float antiHungingFactor = 0.03f;
 
 	private const float zeroVelocity = 0.1f;
 	private const float zeroCos = 0.02f; // arccos 0.02 ≈ 88,854°
@@ -51,6 +64,7 @@ public class Kaban : EntityWithHealth
 		new Dictionary<NavigationState, Color>
 		{
 			[NavigationState.Running] = Color.clear, 
+			[NavigationState.ForceRunning] = Colors.Orange,
 			[NavigationState.Stopping] = Color.red,
 			[NavigationState.Turning] = Color.yellow,
 			[NavigationState.Falling] = Color.cyan
@@ -61,6 +75,7 @@ public class Kaban : EntityWithHealth
 		navigationActions = new Dictionary<NavigationState, Func<Vector3, NavigationState>>
 		{
 			[NavigationState.Running] = Run,
+			[NavigationState.ForceRunning] = ForceRun,
 			[NavigationState.Stopping] = Stop,
 			[NavigationState.Turning] = Turn,
 			[NavigationState.Falling] = Fall
@@ -79,6 +94,9 @@ public class Kaban : EntityWithHealth
 		rigidbody = GetComponent<Rigidbody>();
 		collider = GetComponent<BoxCollider>();
 
+		lastPosition = rigidbody.position;
+		hungChecker = new UpdateTimer(hungCheckInterval);
+
 		base.Start();
 	}
 
@@ -87,6 +105,9 @@ public class Kaban : EntityWithHealth
 		base.Update();
 		if (!IsAlive || !GameManager.Instance.hasGameStarted)
 			return;
+
+		if (hungChecker.Check(Time.deltaTime))
+			isHung = IsHung();
 
 		// ReSharper disable once Unity.PerformanceCriticalCodeInvocation
 		targetBuilding = GetTargetBuilding();
@@ -181,6 +202,17 @@ public class Kaban : EntityWithHealth
 		}
 	}
 
+	private bool IsHung()
+	{
+		var currentPosition = rigidbody.position;
+		// ReSharper disable once LocalVariableHidesMember
+		var isHung = (currentPosition - lastPosition).magnitude 
+			< maxVelocity * hungCheckInterval * antiHungingFactor;
+
+		lastPosition = currentPosition;
+		return isHung;
+	}
+
 	private Building GetTargetBuilding()
 	{
 		var buildings = BuildingManager.Instance.Buildings;
@@ -224,26 +256,59 @@ public class Kaban : EntityWithHealth
 	{
 		if (isFalling)
 			return NavigationState.Falling;
+		if (isHung)
+			return NavigationState.ForceRunning;
 
 		navigationAgent.SetDestination(target);
 		if (IsMissingTarget())
 			return NavigationState.Stopping;
+		
+		UpdateVelocityAndRotation(navigationAgent.desiredVelocity, maxAcceleration, maxVelocity);
+		return NavigationState.Running;
+	}
 
+	private NavigationState ForceRun(Vector3 target)
+	{
+		if (isFalling)
+			return NavigationState.Falling;
+
+		if (lastSteeringTarget.HasValue && lastSteeringTarget.Value != navigationAgent.steeringTarget)
+		{
+			lastSteeringTarget = null;
+			return NavigationState.Running;
+		}
+
+		navigationAgent.SetDestination(target);
+		if (IsMissingTarget())
+		{
+			lastSteeringTarget = null;
+			return NavigationState.Stopping;
+		}
+
+		UpdateVelocityAndRotation(
+			navigationAgent.steeringTarget - rigidbody.position, 
+			forceAcceleration, 
+			forceVelocity);
+		lastSteeringTarget = navigationAgent.steeringTarget;
+		return NavigationState.ForceRunning;
+	}
+
+	// ReSharper disable once ParameterHidesMember
+	private void UpdateVelocityAndRotation(Vector3 desiredVelocity, float acceleration, float maxVelocity)
+	{
 		var velocityHorizontalProjection = Vector3.ProjectOnPlane(
-			navigationAgent.desiredVelocity, transform.up);
+			desiredVelocity, transform.up);
 		rigidbody.rotation *= transform.GetTurn(
 			velocityHorizontalProjection,
 			maxAngularVelocityInDeg * Time.deltaTime);
 		var velocityVerticalProjection = Vector3.ProjectOnPlane(
-			navigationAgent.desiredVelocity, transform.right);
+			desiredVelocity, transform.right);
 		rigidbody.rotation *= transform.GetTurn(
 			velocityVerticalProjection,
 			maxAngularVelocityInDeg * Time.deltaTime);
 
 		rigidbody.velocity += transform.GetAcceleratingVelocity(
-			velocity, maxAcceleration * Time.deltaTime, maxVelocity);
-
-		return NavigationState.Running;
+			velocity, acceleration * Time.deltaTime, maxVelocity);
 	}
 
 	private bool IsMissingTarget()
