@@ -1,18 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class KabanManager : MonoBehaviour
 {
-    #region Singletone
+	#region Singletone
 
-    public static KabanManager Instance;
+	public static KabanManager Instance;
 
-    void Awake()
-    {
-        Instance = this;
-    }
+	void Awake()
+	{
+		WalkableAreasMask = walkableAreas
+			.Select(areaName => 1 << NavMesh.GetAreaFromName(areaName))
+			.Sum();
 
-    #endregion
+		Instance = this;
+	}
 
-    public ISet<Kaban> Kabans = new HashSet<Kaban>();
+	#endregion
+
+	public readonly ISet<Kaban> Kabans = new HashSet<Kaban>();
+
+	public string[] walkableAreas;
+
+	[NonSerialized]
+	public int WalkableAreasMask;
 }
