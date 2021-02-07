@@ -56,6 +56,9 @@ public class Kaban : EntityWithHealth
 	private const float zeroCos = 0.02f; // arccos 0.02 ≈ 88,854°
 	private const float zeroAngleInDeg = 90 - 88.854f;
 
+	private const float maxSlopeInDeg = 45f;
+	private const float antiSlopeAngularVelocityInDeg = 540f;
+
 	private static readonly IReadOnlyDictionary<NavigationState, Color> navigationStateColors =
 		new Dictionary<NavigationState, Color>
 		{
@@ -103,6 +106,8 @@ public class Kaban : EntityWithHealth
 		if (hungChecker.Check(Time.deltaTime))
 			isHung = IsHung();
 
+		AlignWithGround();
+
 		// ReSharper disable once Unity.PerformanceCriticalCodeInvocation
 		targetBuilding = GetTargetBuilding();
 		if (targetBuilding)
@@ -135,14 +140,22 @@ public class Kaban : EntityWithHealth
 			Gizmos.DrawWireSphere(wanderPoint.Value, wanderPointRadius);
 		}
 		
+		var position = transform.position;
 		if (navigationAgent && rigidbody)
 		{
-			var position = transform.position;
-			
 			Gizmos.color = Color.red;
 			Gizmos.DrawLine(position, position + navigationAgent.desiredVelocity);
 			Gizmos.color = Color.green;
 			Gizmos.DrawLine(position, position + rigidbody.velocity);
+		}
+
+		var groundNormal = GetGroundNormal();
+		if (groundNormal.HasValue && collider)
+		{
+			Gizmos.color = Color.yellow;
+			Gizmos.DrawRay(
+				position,
+				groundNormal.Value * (collider.size.y * transform.localScale.y * 1.25f));
 		}
 		
 		if (!navigationStateColors.TryGetValue(navigationState, out var navigationStateColor))
@@ -222,6 +235,58 @@ public class Kaban : EntityWithHealth
 		return null;
 	}
 
+	private void AlignWithGround()
+	{
+		var groundNormal = GetGroundNormal();
+		if (!groundNormal.HasValue)
+			return;
+
+		var up = transform.up;
+		if (Vector3.Angle(up, groundNormal.Value) < maxSlopeInDeg)
+			return;
+
+		rigidbody.rotation *= transform.GetRotation(
+			up, groundNormal.Value, antiSlopeAngularVelocityInDeg * Time.deltaTime);
+	}
+	
+	private Vector3? GetGroundNormal()
+	{
+		if (!collider)
+			return null;
+
+		var scale = transform.localScale;
+		var colliderCenter = transform.TransformPoint(
+			Vector3.Scale(collider.center, scale));
+		var colliderSize = Vector3.Scale(collider.size, scale);
+		var offsets = new[]
+		{
+			new Vector3(-colliderSize.x, 0, -colliderSize.z),
+			new Vector3(-colliderSize.x, 0, colliderSize.z),
+			new Vector3(colliderSize.x, 0, -colliderSize.z),
+			new Vector3(colliderSize.x, 0, colliderSize.z)
+		};
+
+		var (sum, count) = offsets
+			.Select(offset => GetGroundNormal(colliderCenter + offset))
+			.Where(normal => normal.HasValue)
+			.Aggregate(
+				(Sum: Vector3.zero, Count: 0),
+				(result, normal) => (result.Sum + normal.Value, result.Count + 1));
+		return count > 0 ? (Vector3?)(sum / count) : null;
+
+		Vector3? GetGroundNormal(Vector3 from)
+		{
+			if (!Physics.Raycast(
+				from,
+				Physics.gravity,
+				out var groundHit,
+				GameManager.Instance.groundLayers))
+				return null;
+
+			return groundHit.normal;
+		}
+	}
+
 	private void NavigateTo(Vector3 target)
 	{
 		if (!navigationActions.TryGetValue(navigationState, out var navigationAction))
@@ -272,7 +337,8 @@ public class Kaban : EntityWithHealth
 	{
 		var velocityHorizontalProjection = Vector3.ProjectOnPlane(
 			desiredVelocity, transform.up);
-		rigidbody.rotation *= transform.GetTurn(
+		rigidbody.rotation *= transform.GetRotation(
+			transform.forward,
 			velocityHorizontalProjection,
 			maxAngularVelocityInDeg * Time.deltaTime);
 
@@ -327,7 +393,8 @@ public class Kaban : EntityWithHealth
 		if (Vector3.Angle(transform.forward, velocityHorizontalProjection) < zeroAngleInDeg)
 			return NavigationState.Running;
 		
-		rigidbody.rotation *= transform.GetTurn(
+		rigidbody.rotation *= transform.GetRotation(
+			transform.forward,
 			velocityHorizontalProjection,
 			maxAngularVelocityInDeg * Time.deltaTime);
 

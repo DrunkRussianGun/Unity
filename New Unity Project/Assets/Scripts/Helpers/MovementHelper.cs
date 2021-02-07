@@ -5,24 +5,15 @@ namespace Helpers
 {
 	public static class MovementHelper
 	{
-		public static Quaternion GetTurn(this Transform transform, Vector3 direction, float maxAngleInDeg)
-		{
-			var forward = transform.forward;
-			var turnAngle = Math.Min(maxAngleInDeg, Vector3.Angle(forward, direction));
-			var turnAxis = Vector3.Cross(forward, direction);
-			return Quaternion.AngleAxis(turnAngle, transform.InverseTransformVector(turnAxis));
-		}
-	
-		public static Vector3 GetTorque(
+		public static Quaternion GetRotation(
 			this Transform transform,
-			Quaternion currentRotation,
-			Vector3 direction,
-			float maxAngleInDeg)
+			Vector3 from,
+			Vector3 to,
+			float maxAngleInDeg = Mathf.Infinity)
 		{
-			var turn = transform.GetTurn(direction, maxAngleInDeg);
-			// https://stackoverflow.com/questions/24216507/how-to-calculate-euler-angles-from-forward-up-and-right-vectors/24225689#24225689
-			var magicQuaternion = currentRotation * turn * Quaternion.Inverse(currentRotation);
-			return new Vector3(magicQuaternion.x, magicQuaternion.y, magicQuaternion.z);
+			var turnAngle = Math.Min(maxAngleInDeg, Vector3.Angle(from, to));
+			var turnAxis = Vector3.Cross(from, to);
+			return Quaternion.AngleAxis(turnAngle, transform.InverseTransformVector(turnAxis));
 		}
 
 		public static Vector3 GetAcceleratingVelocity(
